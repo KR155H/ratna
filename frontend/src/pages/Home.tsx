@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Diamond, Star, Users, Shield, Award, ArrowRight, Eye, Heart, TrendingUp, CheckCircle, Sparkles } from 'lucide-react';
+import { Diamond, Star, Users, Shield, Award, ArrowRight, Eye, Heart, TrendingUp, CheckCircle, Sparkles, Circle, Square, Hexagon, Octagon, Triangle, Scissors, Palette, Scale, Search, Quote, Mail } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 
 interface Diamond {
@@ -132,6 +132,175 @@ const Home: React.FC = () => {
               >
                 Sell Your Diamond
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by Shape Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Shop by <span className="text-amber-500">Shape</span>
+            </h2>
+            <p className="text-gray-600">Find the perfect cut for your style</p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {[
+              { name: 'Round', icon: Circle, cut: 'Round Brilliant' },
+              { name: 'Princess', icon: Square, cut: 'Princess' },
+              { name: 'Emerald', icon: Octagon, cut: 'Emerald' },
+              { name: 'Pear', icon: Triangle, cut: 'Pear' },
+              { name: 'Oval', icon: Circle, cut: 'Oval', style: { transform: 'scaleY(0.7)' } },
+              { name: 'Heart', icon: Heart, cut: 'Heart' },
+            ].map((shape) => (
+              <Link
+                key={shape.name}
+                to={`/purchase?cut=${shape.cut}`}
+                className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:bg-amber-50 group border border-gray-100"
+              >
+                <div className="w-12 h-12 mb-3 text-gray-400 group-hover:text-amber-500 transition-colors flex items-center justify-center">
+                  <shape.icon className="w-10 h-10" style={shape.style} />
+                </div>
+                <span className="font-semibold text-gray-700 group-hover:text-amber-700">{shape.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Diamond Education Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Understanding the <span className="text-amber-500">4Cs</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Learn what makes each diamond unique and valuable
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                title: 'Cut',
+                icon: Scissors,
+                desc: 'The most important factor. It determines the diamond\'s brilliance and sparkle.',
+                color: 'blue'
+              },
+              {
+                title: 'Color',
+                icon: Palette,
+                desc: 'Graded from D (colorless) to Z (light yellow). Less color means higher value.',
+                color: 'purple'
+              },
+              {
+                title: 'Clarity',
+                icon: Search,
+                desc: 'Measures internal inclusions and external blemishes. Flawless is the rarest.',
+                color: 'green'
+              },
+              {
+                title: 'Carat',
+                icon: Scale,
+                desc: 'The unit of weight for diamonds. One carat equals 200 milligrams.',
+                color: 'amber'
+              }
+            ].map((item) => (
+              <div key={item.title} className="bg-gray-50 rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-300 group">
+                <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-${item.color}-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                  <item.icon className={`w-8 h-8 text-${item.color}-600`} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-gray-50 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Stories of <span className="text-amber-500">Love</span>
+            </h2>
+            <p className="text-xl text-gray-600">Hear from our happy customers</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sarah & James",
+                role: "Engaged Couple",
+                text: "We found the perfect engagement ring on Ratna. The process was transparent, and the diamond is absolutely stunning!",
+                location: "New York, USA"
+              },
+              {
+                name: "Michael Chen",
+                role: "Jewelry Collector",
+                text: "As a collector, I appreciate the detailed certification and verification process. Ratna is my go-to for premium stones.",
+                location: "Singapore"
+              },
+              {
+                name: "Emily Thompson",
+                role: "Happy Seller",
+                text: "Selling my diamond was safe and easy. I got a fair price and the support team was helpful throughout the process.",
+                location: "London, UK"
+              }
+            ].map((testimonial, i) => (
+              <div key={i} className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-all relative">
+                <Quote className="absolute top-6 left-6 w-10 h-10 text-amber-100" />
+                <div className="relative z-10 pt-8">
+                  <p className="text-gray-600 mb-6 italic">"{testimonial.text}"</p>
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-amber-200 rounded-full flex items-center justify-center text-amber-700 font-bold mr-3">
+                      {testimonial.name[0]}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                      <p className="text-sm text-gray-500">{testimonial.role} • {testimonial.location}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-12 relative overflow-hidden">
+            {/* Background decorations */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500 opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500 opacity-10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                <Mail className="w-8 h-8 text-amber-400" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Stay in the Loop</h2>
+              <p className="text-gray-300 mb-8 max-w-lg mx-auto">
+                Subscribe to our newsletter for exclusive offers, diamond education, and market updates.
+              </p>
+
+              <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); alert('Thanks for subscribing!'); }}>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-6 py-3 rounded-xl border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  required
+                />
+                <button type="submit" className="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                  Subscribe
+                </button>
+              </form>
             </div>
           </div>
         </div>
