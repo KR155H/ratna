@@ -182,9 +182,11 @@ router.get('/:id', authenticateToken, async (req, res) => {
       });
     }
 
+    const userId = req.user.userId.toString();
+
     // Check if user is sender or receiver
-    if (message.sender._id.toString() !== req.user.userId && 
-        message.receiver._id.toString() !== req.user.userId) {
+    if (message.sender._id.toString() !== userId &&
+        message.receiver._id.toString() !== userId) {
       return res.status(403).json({ 
         success: false,
         error: 'Access denied',
@@ -193,7 +195,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
     }
 
     // Mark as read if user is the receiver
-    if (message.receiver._id.toString() === req.user.userId && !message.isRead) {
+    if (message.receiver._id.toString() === userId && !message.isRead) {
       await message.markAsRead();
     }
 
@@ -234,8 +236,9 @@ router.post('/:id/reply', authenticateToken, async (req, res) => {
     }
 
     // Check if user is sender or receiver (both can reply)
-    if (message.sender.toString() !== req.user.userId && 
-        message.receiver.toString() !== req.user.userId) {
+    const userId = req.user.userId.toString();
+    if (message.sender.toString() !== userId &&
+        message.receiver.toString() !== userId) {
       return res.status(403).json({ 
         success: false,
         error: 'Access denied',
@@ -290,7 +293,7 @@ router.put('/:id/read', authenticateToken, async (req, res) => {
     }
 
     // Check if user is the receiver
-    if (message.receiver.toString() !== req.user.userId) {
+    if (message.receiver.toString() !== req.user.userId.toString()) {
       return res.status(403).json({ 
         success: false,
         error: 'Access denied',
@@ -328,8 +331,9 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     }
 
     // Check if user is sender or receiver
-    if (message.sender.toString() !== req.user.userId && 
-        message.receiver.toString() !== req.user.userId) {
+    const userId = req.user.userId.toString();
+    if (message.sender.toString() !== userId &&
+        message.receiver.toString() !== userId) {
       return res.status(403).json({ 
         success: false,
         error: 'Access denied',
