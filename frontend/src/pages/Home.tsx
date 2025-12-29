@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Diamond, Star, Users, Shield, Award, ArrowRight, Eye, Heart, TrendingUp, CheckCircle, Sparkles, Circle, Square, Hexagon, Octagon, Triangle, Scissors, Palette, Scale, Search, Quote, Mail } from 'lucide-react';
+import { Diamond, Star, Users, Shield, Award, ArrowRight, Eye, Heart, TrendingUp, CheckCircle, Sparkles, Scissors, Palette, Scale, Search, Quote, Mail } from 'lucide-react';
+import { RoundDiamond, PrincessDiamond, EmeraldDiamond, PearDiamond, OvalDiamond, HeartDiamond } from '../components/DiamondShapes';
 import { useCurrency } from '../context/CurrencyContext';
 
 interface Diamond {
@@ -149,20 +150,20 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {[
-              { name: 'Round', icon: Circle, cut: 'Round Brilliant' },
-              { name: 'Princess', icon: Square, cut: 'Princess' },
-              { name: 'Emerald', icon: Octagon, cut: 'Emerald' },
-              { name: 'Pear', icon: Triangle, cut: 'Pear' },
-              { name: 'Oval', icon: Circle, cut: 'Oval', style: { transform: 'scaleY(0.7)' } },
-              { name: 'Heart', icon: Heart, cut: 'Heart' },
+              { name: 'Round', icon: RoundDiamond, cut: 'Round Brilliant' },
+              { name: 'Princess', icon: PrincessDiamond, cut: 'Princess' },
+              { name: 'Emerald', icon: EmeraldDiamond, cut: 'Emerald' },
+              { name: 'Pear', icon: PearDiamond, cut: 'Pear' },
+              { name: 'Oval', icon: OvalDiamond, cut: 'Oval' },
+              { name: 'Heart', icon: HeartDiamond, cut: 'Heart' },
             ].map((shape) => (
               <Link
                 key={shape.name}
                 to={`/purchase?cut=${shape.cut}`}
                 className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:bg-amber-50 group border border-gray-100"
               >
-                <div className="w-12 h-12 mb-3 text-gray-400 group-hover:text-amber-500 transition-colors flex items-center justify-center">
-                  <shape.icon className="w-10 h-10" style={shape.style} />
+                <div className="w-16 h-16 mb-4 text-gray-400 group-hover:text-amber-500 transition-colors flex items-center justify-center transform group-hover:scale-110 duration-300">
+                  <shape.icon className="w-full h-full" />
                 </div>
                 <span className="font-semibold text-gray-700 group-hover:text-amber-700">{shape.name}</span>
               </Link>
