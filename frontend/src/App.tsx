@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { AdminProvider } from './context/AdminContext';
 import { CurrencyProvider } from './context/CurrencyContext';
+import { CompareProvider } from './context/CompareContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AdminRoute from './components/AdminRoute';
@@ -21,8 +22,9 @@ function App() {
     <AdminProvider>
       <AuthProvider>
         <CurrencyProvider>
-          <Router>
-            <div className="min-h-screen">
+          <CompareProvider>
+            <Router>
+              <div className="min-h-screen">
               <Routes>
                 {/* Admin Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
@@ -52,8 +54,9 @@ function App() {
                   </div>
                 } />
               </Routes>
-            </div>
-          </Router>
+              </div>
+            </Router>
+          </CompareProvider>
         </CurrencyProvider>
       </AuthProvider>
     </AdminProvider>
