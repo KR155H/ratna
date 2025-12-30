@@ -634,13 +634,22 @@ const AdminDashboard: React.FC = () => {
               <div>
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-bold text-gray-900">Diamonds Management</h2>
-                  <button
-                    onClick={fetchDiamonds}
-                    className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                    <span>Refresh</span>
-                  </button>
+                  <div className="flex space-x-4">
+                    <button
+                      onClick={() => navigate('/admin/add-diamond')}
+                      className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                      <Diamond className="w-4 h-4" />
+                      <span>Add Ratna Diamond</span>
+                    </button>
+                    <button
+                      onClick={fetchDiamonds}
+                      className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      <span>Refresh</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">

@@ -15,6 +15,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminAddDiamond from './pages/AdminAddDiamond';
 import Messages from './pages/Messages';
 
 function App() {
@@ -31,6 +32,11 @@ function App() {
                 <Route path="/admin/dashboard" element={
                   <AdminRoute>
                     <AdminDashboard />
+                  </AdminRoute>
+                } />
+                <Route path="/admin/add-diamond" element={
+                  <AdminRoute>
+                    <AdminAddDiamond />
                   </AdminRoute>
                 } />
                 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Search, ListFilter as Filter, Diamond, Eye, Heart, Star, User, Calendar, ExternalLink, MessageCircle, Video, Scale, X, Check } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Search, ListFilter as Filter, Diamond, Eye, Heart, Star, User, Calendar, ExternalLink, MessageCircle, Video, Scale, X, Check, ShoppingBag, CreditCard, Truck } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import { useAuth } from '../context/AuthContext';
 import { useCompare } from '../context/CompareContext';
@@ -30,23 +30,38 @@ interface Diamond {
     certificateNumber?: string;
     certificateUrl?: string;
   };
+  isRatnaDiamond?: boolean;
 }
 
 const Purchase: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [diamonds, setDiamonds] = useState<Diamond[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDiamond, setSelectedDiamond] = useState<Diamond | null>(null);
+
+  // Inquiry States
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [inquiryDiamond, setInquiryDiamond] = useState<Diamond | null>(null);
-  const [inquiryForm, setInquiryForm] = useState({
-    subject: '',
-    message: ''
-  });
+  const [inquiryForm, setInquiryForm] = useState({ subject: '', message: '' });
   const [inquiryLoading, setInquiryLoading] = useState(false);
   const [inquiryError, setInquiryError] = useState('');
+
+  // Checkout States
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [checkoutDiamond, setCheckoutDiamond] = useState<Diamond | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+  const [shippingAddress, setShippingAddress] = useState({
+    street: '', city: '', state: '', zip: '', country: ''
+  });
+  const [paymentDetails, setPaymentDetails] = useState({
+    cardNumber: '', expiry: '', cvv: '', name: ''
+  });
+
   const { formatPrice } = useCurrency();
   const { user, token } = useAuth();
   const { compareList, addToCompare, removeFromCompare, isInCompare, clearCompare } = useCompare();
@@ -79,7 +94,6 @@ const Purchase: React.FC = () => {
     const cut = searchParams.get('cut');
     if (cut) {
       setFilters(prev => ({ ...prev, cut }));
-      // Also open filters to show it's active
       setShowFilters(true);
     }
   }, [location.search]);
@@ -121,7 +135,7 @@ const Purchase: React.FC = () => {
 
   useEffect(() => {
     fetchDiamonds();
-  }, [sortBy, sortOrder, filters]); // Added filters to dependency array
+  }, [sortBy, sortOrder, filters]);
 
   const handleSearch = () => {
     fetchDiamonds();
@@ -136,7 +150,6 @@ const Purchase: React.FC = () => {
 
   const applyFilters = () => {
     fetchDiamonds();
-    // setShowFilters(false); // Keep filters open to refine
   };
 
   const clearFilters = () => {
@@ -150,7 +163,6 @@ const Purchase: React.FC = () => {
       maxCarat: ''
     });
     setSearchTerm('');
-    // fetchDiamonds will be triggered by useEffect on filters change
   };
 
   const formatDate = (dateString: string) => {
@@ -164,6 +176,7 @@ const Purchase: React.FC = () => {
   const handleInquire = (diamond: Diamond) => {
     if (!user) {
       alert('Please login to send inquiries');
+      navigate('/login');
       return;
     }
     
@@ -210,6 +223,57 @@ const Purchase: React.FC = () => {
       setInquiryError('Network error. Please try again.');
     } finally {
       setInquiryLoading(false);
+    }
+  };
+
+  const handleBuyNow = (diamond: Diamond) => {
+    if (!user) {
+      alert('Please login to purchase diamonds');
+      navigate('/login');
+      return;
+    }
+    setCheckoutDiamond(diamond);
+    setShowCheckoutModal(true);
+    setPurchaseSuccess(false);
+    setCheckoutError('');
+  };
+
+  const handlePurchase = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!checkoutDiamond || !user) return;
+
+    setCheckoutLoading(true);
+    setCheckoutError('');
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/diamonds/${checkoutDiamond._id}/buy`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          shippingAddress,
+          paymentDetails // In real app, never send raw card details. Send token.
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setPurchaseSuccess(true);
+        setTimeout(() => {
+          setShowCheckoutModal(false);
+          setCheckoutDiamond(null);
+          fetchDiamonds(); // Refresh to remove sold diamond
+        }, 3000);
+      } else {
+        setCheckoutError(data.message || 'Purchase failed');
+      }
+    } catch (error) {
+      console.error('Error purchasing diamond:', error);
+      setCheckoutError('Network error. Please try again.');
+    } finally {
+      setCheckoutLoading(false);
     }
   };
 
@@ -298,7 +362,15 @@ const Purchase: React.FC = () => {
             
             <div className="p-8">
               <div className="mb-6">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2 font-serif">{diamond.name}</h2>
+                <div className="flex items-center space-x-2 mb-2">
+                  <h2 className="text-3xl font-bold text-gray-900 font-serif">{diamond.name}</h2>
+                  {diamond.isRatnaDiamond && (
+                    <span className="bg-gradient-to-r from-gold to-yellow-600 text-white text-xs px-2 py-1 rounded-full font-bold shadow-sm flex items-center">
+                      <Diamond className="w-3 h-3 mr-1 fill-current" />
+                      RATNA's diam
+                    </span>
+                  )}
+                </div>
                 <p className="text-4xl font-bold text-accent font-serif">{formatPrice(diamond.price)}</p>
                 <p className="text-gray-600">{formatPrice(Math.round(diamond.price / diamond.carat))} per carat</p>
               </div>
@@ -352,13 +424,24 @@ const Purchase: React.FC = () => {
               </div>
 
               <div className="flex space-x-4">
-                <button
-                  onClick={() => handleInquire(diamond)}
-                  className="flex-1 bg-accent text-white py-3 px-6 rounded-lg hover:bg-accent-hover transition-all duration-300 flex items-center justify-center transform hover:scale-105"
-                >
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Send Inquiry
-                </button>
+                {diamond.isRatnaDiamond ? (
+                  <button
+                    onClick={() => handleBuyNow(diamond)}
+                    className="flex-1 bg-gold text-white py-3 px-6 rounded-lg hover:bg-gold-hover transition-all duration-300 flex items-center justify-center transform hover:scale-105 shadow-lg"
+                  >
+                    <ShoppingBag className="w-5 h-5 mr-2" />
+                    Buy Now
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleInquire(diamond)}
+                    className="flex-1 bg-accent text-white py-3 px-6 rounded-lg hover:bg-accent-hover transition-all duration-300 flex items-center justify-center transform hover:scale-105"
+                  >
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    Send Inquiry
+                  </button>
+                )}
+
                 <button
                   onClick={() => {
                     if (isInCompare(diamond._id)) {
@@ -369,7 +452,7 @@ const Purchase: React.FC = () => {
                   }}
                   className={`px-6 py-3 border rounded-lg transition-all duration-300 flex items-center ${
                     isInCompare(diamond._id)
-                      ? 'bg-gold text-white border-gold hover:bg-gold-hover'
+                      ? 'bg-secondary text-accent border-accent hover:bg-gray-200'
                       : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -383,6 +466,104 @@ const Purchase: React.FC = () => {
       </div>
     </div>
   )};
+
+  const CheckoutModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold font-serif text-accent">Secure Checkout</h2>
+            <button onClick={() => setShowCheckoutModal(false)} className="text-gray-400 hover:text-gray-600">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {purchaseSuccess ? (
+            <div className="text-center py-12">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Check className="w-10 h-10 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Purchase Successful!</h3>
+              <p className="text-gray-600 mb-6">Thank you for your purchase. Your diamond is on its way.</p>
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-300 border-t-accent mx-auto"></div>
+              <p className="text-sm text-gray-500 mt-2">Redirecting...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-8">
+              {/* Order Summary */}
+              <div className="bg-gray-50 p-4 rounded-xl flex items-center space-x-4 border border-gray-100">
+                <img
+                  src={checkoutDiamond?.image || 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg'}
+                  alt={checkoutDiamond?.name}
+                  className="w-16 h-16 rounded-lg object-cover"
+                />
+                <div>
+                  <h4 className="font-bold text-gray-900">{checkoutDiamond?.name}</h4>
+                  <p className="text-gold font-bold">{checkoutDiamond && formatPrice(checkoutDiamond.price)}</p>
+                </div>
+              </div>
+
+              {checkoutError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {checkoutError}
+                </div>
+              )}
+
+              <form onSubmit={handlePurchase} className="space-y-6">
+                {/* Shipping Address */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <Truck className="w-5 h-5 mr-2 text-accent" />
+                    Shipping Address
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" placeholder="Street Address" className="col-span-2 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required value={shippingAddress.street} onChange={e => setShippingAddress({...shippingAddress, street: e.target.value})} />
+                    <input type="text" placeholder="City" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required value={shippingAddress.city} onChange={e => setShippingAddress({...shippingAddress, city: e.target.value})} />
+                    <input type="text" placeholder="State/Province" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required value={shippingAddress.state} onChange={e => setShippingAddress({...shippingAddress, state: e.target.value})} />
+                    <input type="text" placeholder="ZIP/Postal Code" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required value={shippingAddress.zip} onChange={e => setShippingAddress({...shippingAddress, zip: e.target.value})} />
+                    <input type="text" placeholder="Country" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required value={shippingAddress.country} onChange={e => setShippingAddress({...shippingAddress, country: e.target.value})} />
+                  </div>
+                </div>
+
+                {/* Payment Details */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <CreditCard className="w-5 h-5 mr-2 text-accent" />
+                    Payment Method
+                  </h3>
+                  <div className="space-y-4">
+                    <input type="text" placeholder="Cardholder Name" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required value={paymentDetails.name} onChange={e => setPaymentDetails({...paymentDetails, name: e.target.value})} />
+                    <input type="text" placeholder="Card Number" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required maxLength={19} value={paymentDetails.cardNumber} onChange={e => setPaymentDetails({...paymentDetails, cardNumber: e.target.value})} />
+                    <div className="grid grid-cols-2 gap-4">
+                      <input type="text" placeholder="MM/YY" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required maxLength={5} value={paymentDetails.expiry} onChange={e => setPaymentDetails({...paymentDetails, expiry: e.target.value})} />
+                      <input type="text" placeholder="CVV" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent" required maxLength={4} value={paymentDetails.cvv} onChange={e => setPaymentDetails({...paymentDetails, cvv: e.target.value})} />
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={checkoutLoading}
+                  className="w-full py-4 bg-gold text-white font-bold rounded-xl hover:bg-gold-hover transition-all shadow-lg flex items-center justify-center disabled:opacity-50"
+                >
+                  {checkoutLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Processing Payment...
+                    </>
+                  ) : (
+                    <>
+                      Pay {checkoutDiamond && formatPrice(checkoutDiamond.price)}
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 
   const CompareModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -660,7 +841,7 @@ const Purchase: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {diamonds.map((diamond) => (
-              <div key={diamond._id} className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
+              <div key={diamond._id} className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 relative">
                 <div className="relative overflow-hidden h-64">
                   <img
                     src={diamond.image || 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg'}
@@ -672,15 +853,29 @@ const Purchase: React.FC = () => {
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                  {/* Views */}
                   <div className="absolute top-3 right-3 bg-black bg-opacity-60 text-white px-3 py-1 rounded-full text-sm flex items-center backdrop-blur-sm">
                     <Eye className="w-3 h-3 mr-1" />
                     {diamond.views}
                   </div>
+
+                  {/* Status Badge */}
                   <div className="absolute top-3 left-3">
                     <span className="bg-white text-accent px-3 py-1 rounded-full text-xs font-bold shadow-lg uppercase tracking-wider">
                       {diamond.status}
                     </span>
                   </div>
+
+                  {/* Ratna's Diamond Badge */}
+                  {diamond.isRatnaDiamond && (
+                    <div className="absolute top-12 left-3">
+                      <span className="bg-gradient-to-r from-gold to-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center">
+                        <Diamond className="w-3 h-3 mr-1 fill-current" />
+                        RATNA's diam
+                      </span>
+                    </div>
+                  )}
 
                   {/* Quick Compare Action */}
                   <button
@@ -751,13 +946,23 @@ const Purchase: React.FC = () => {
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Details
                     </button>
-                    <button
-                      onClick={() => handleInquire(diamond)}
-                      className="flex-1 px-4 py-3 border border-accent text-accent rounded-xl hover:bg-accent hover:text-white transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Inquire
-                    </button>
+                    {diamond.isRatnaDiamond ? (
+                      <button
+                        onClick={() => handleBuyNow(diamond)}
+                        className="flex-1 px-4 py-3 bg-gold text-white rounded-xl hover:bg-gold-hover hover:shadow-lg transition-all duration-300 text-sm font-bold transform hover:scale-105 flex items-center justify-center"
+                      >
+                        <ShoppingBag className="w-4 h-4 mr-2" />
+                        Buy Now
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleInquire(diamond)}
+                        className="flex-1 px-4 py-3 border border-accent text-accent rounded-xl hover:bg-accent hover:text-white transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Inquire
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -815,6 +1020,9 @@ const Purchase: React.FC = () => {
         {/* Compare Modal */}
         {showCompareModal && <CompareModal />}
 
+        {/* Checkout Modal */}
+        {showCheckoutModal && <CheckoutModal />}
+
         {/* Inquiry Modal */}
         {showInquiryModal && inquiryDiamond && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -826,7 +1034,7 @@ const Purchase: React.FC = () => {
                     onClick={() => setShowInquiryModal(false)}
                     className="text-gray-400 hover:text-gray-600"
                   >
-                    ×
+                    <X className="w-6 h-6" />
                   </button>
                 </div>
 
