@@ -7,6 +7,7 @@ const Diamond = require('../models/Diamond');
 const User = require('../models/User');
 const DiamondSale = require('../models/DiamondSale');
 const { authenticateToken } = require('../middleware/auth');
+const { authenticateAdminToken } = require('../middleware/adminAuth');
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, '../uploads');
@@ -174,6 +175,130 @@ router.get('/', async (req, res) => {
       success: false,
       error: 'Internal server error',
       message: 'An error occurred while fetching diamonds'
+    });
+  }
+});
+
+// Add new diamond by Admin
+router.post('/admin/add', authenticateAdminToken, upload.array('media', 10), async (req, res) => {
+  try {
+    const {
+      name, carat, cut, color, clarity, price, description,
+      certification, dimensions, fluorescence, polish, symmetry,
+      certificateNumber, certificateUrl
+    } = req.body;
+
+    // Validation
+    if (!name || !carat || !cut || !color || !clarity || !price || !description) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'All required diamond details must be provided',
+        required: ['name', 'carat', 'cut', 'color', 'clarity', 'price', 'description']
+      });
+    }
+
+    // Handle media uploads
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'At least one image or video is required',
+        fields: { media: true }
+      });
+    }
+
+    // Process uploaded media files
+    const mediaFiles = req.files.map(file => ({
+      type: file.mimetype.startsWith('image/') ? 'image' : 'video',
+      url: `http://localhost:5000/uploads/diamonds/${file.filename}`,
+      filename: file.filename,
+      size: file.size
+    }));
+
+    // Use first image as main image
+    const mainImage = mediaFiles.find(media => media.type === 'image');
+    if (!mainImage) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'At least one image is required',
+        fields: { media: true }
+      });
+    }
+
+    // Create diamond object
+    const diamondData = {
+      name: name.trim(),
+      carat: parseFloat(carat),
+      cut,
+      color,
+      clarity,
+      price: parseInt(price),
+      description: description.trim(),
+      image: mainImage.url,
+      media: mediaFiles,
+      sellerName: 'RATNA Official',
+      isRatnaDiamond: true
+    };
+
+    // Add optional fields if provided
+    if (certification) {
+      try {
+        const certData = JSON.parse(certification);
+        if (certificateNumber) certData.certificateNumber = certificateNumber;
+        if (certificateUrl) certData.certificateUrl = certificateUrl;
+        diamondData.certification = certData;
+      } catch (e) {
+        diamondData.certification = {
+          institute: certification,
+          certificateNumber: certificateNumber || '',
+          certificateUrl: certificateUrl || ''
+        };
+      }
+    }
+    if (dimensions) {
+      try {
+        diamondData.dimensions = JSON.parse(dimensions);
+      } catch (e) {
+        // Handle simple dimension input
+      }
+    }
+    if (fluorescence) diamondData.fluorescence = fluorescence;
+    if (polish) diamondData.polish = polish;
+    if (symmetry) diamondData.symmetry = symmetry;
+
+    // Create and save diamond
+    const diamond = new Diamond(diamondData);
+    await diamond.save();
+
+    console.log('✅ New RATNA diamond added:', diamond.name, 'by Admin');
+
+    res.status(201).json({
+      success: true,
+      message: 'Ratna Diamond added successfully',
+      diamond
+    });
+  } catch (error) {
+    console.error('❌ Admin Diamond creation error:', error);
+
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => ({
+        field: err.path,
+        message: err.message
+      }));
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'Some fields contain invalid data',
+        details: errors
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: 'An error occurred while creating the diamond listing'
     });
   }
 });
@@ -642,6 +767,73 @@ router.post('/:id/mark-sold', authenticateToken, upload.fields([
       success: false,
       error: 'Internal server error',
       message: 'An error occurred while submitting the sale'
+    });
+  }
+});
+
+// Purchase diamond (Buy Now)
+router.post('/:id/buy', authenticateToken, async (req, res) => {
+  try {
+    const { shippingAddress, paymentDetails } = req.body;
+    const diamondId = req.params.id;
+
+    // Validation
+    if (!shippingAddress || !paymentDetails) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'Shipping address and payment details are required'
+      });
+    }
+
+    // Find diamond
+    const diamond = await Diamond.findById(diamondId);
+    if (!diamond) {
+      return res.status(404).json({
+        success: false,
+        error: 'Diamond not found',
+        message: 'The diamond could not be found'
+      });
+    }
+
+    // Check availability
+    if (diamond.status !== 'active') {
+      return res.status(400).json({
+        success: false,
+        error: 'Not available',
+        message: 'This diamond is no longer available for purchase'
+      });
+    }
+
+    // Process Purchase (Mock)
+    // In a real app, this would integrate with Stripe/Razorpay
+    console.log(`💰 Processing purchase for ${diamond.name} ($${diamond.price}) by user ${req.user.userId}`);
+    console.log('📦 Shipping to:', shippingAddress);
+
+    // Update diamond status
+    diamond.status = 'sold';
+    // If it's a Ratna diamond, we might want to track who bought it differently, but 'sold' is fine.
+    // We could store the buyerId if we updated the schema, but for now just marking sold is enough.
+
+    await diamond.save();
+
+    // Create a sale record?
+    // We can create a DiamondSale record automatically to track it in Admin Dashboard.
+    // But DiamondSale schema requires 'invoiceDocument' etc.
+    // For now, we'll just mark it sold. The Admin Dashboard filters 'sold' diamonds.
+
+    res.json({
+      success: true,
+      message: 'Purchase successful! Your diamond will be shipped shortly.',
+      purchaseId: 'ORD-' + Date.now()
+    });
+
+  } catch (error) {
+    console.error('❌ Purchase error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: 'An error occurred while processing your purchase'
     });
   }
 });

@@ -75,11 +75,15 @@ const diamondSchema = new mongoose.Schema({
   seller: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Seller information is required']
+    required: function() { return !this.isRatnaDiamond; }
   },
   sellerName: {
     type: String,
     required: [true, 'Seller name is required']
+  },
+  isRatnaDiamond: {
+    type: Boolean,
+    default: false
   },
   status: {
     type: String,
