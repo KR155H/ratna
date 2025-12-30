@@ -113,16 +113,16 @@ const Navbar: React.FC = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isScrolled 
-        ? 'bg-[#1a1f3a]/95 backdrop-blur-xl shadow-2xl border-b border-gray-700/50'
-        : 'bg-[#1a1f3a]/80 backdrop-blur-lg shadow-xl'
+        ? 'bg-accent/95 backdrop-blur-xl shadow-md border-b border-white/10'
+        : 'bg-accent/80 backdrop-blur-lg shadow-sm'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Enhanced Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative bg-gradient-to-r from-amber-500 to-yellow-500 p-2.5 rounded-xl group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110">
+              <div className="absolute inset-0 bg-white/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative bg-white/10 p-2.5 rounded-xl group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110 border border-white/20">
                 <Diamond className="w-6 h-6 text-white" />
               </div>
             </div>
@@ -130,7 +130,7 @@ const Navbar: React.FC = () => {
               <span className="text-2xl font-bold text-white tracking-tight">
                 Ratna
               </span>
-              <span className="text-[10px] text-amber-400 font-medium tracking-[0.2em] uppercase">Premium Diamonds</span>
+              <span className="text-[10px] text-gray-300 font-medium tracking-[0.2em] uppercase">Premium Diamonds</span>
             </div>
           </Link>
 
@@ -147,11 +147,11 @@ const Navbar: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center space-x-2 relative z-10">
-                  {Icon && <Icon className={`w-4 h-4 ${isActive(path) ? 'text-amber-400' : 'text-gray-400 group-hover:text-amber-400'} transition-colors duration-300`} />}
-                  <span className={isActive(path) ? 'text-amber-400' : ''}>{label}</span>
+                  {Icon && <Icon className={`w-4 h-4 ${isActive(path) ? 'text-white' : 'text-gray-400 group-hover:text-white'} transition-colors duration-300`} />}
+                  <span className={isActive(path) ? 'text-white' : ''}>{label}</span>
                 </div>
                 {isActive(path) && (
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-amber-400 to-yellow-400 rounded-b-lg"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-b-lg"></div>
                 )}
               </Link>
             ))}
@@ -181,12 +181,12 @@ const Navbar: React.FC = () => {
                   </button>
 
                   {isNotificationOpen && (
-                    <div className="absolute right-0 mt-3 w-80 bg-[#1a1f3a] rounded-xl shadow-2xl border border-gray-700 py-2 transform transition-all duration-300 scale-100 opacity-100 z-50">
-                      <div className="px-6 py-4 border-b border-gray-700 bg-[#1a1f3a]">
+                    <div className="absolute right-0 mt-3 w-80 bg-accent rounded-xl shadow-2xl border border-gray-700 py-2 transform transition-all duration-300 scale-100 opacity-100 z-50">
+                      <div className="px-6 py-4 border-b border-gray-700 bg-accent">
                         <div className="flex items-center justify-between">
                           <h3 className="text-lg font-bold text-white">Notifications</h3>
                           {unreadCount > 0 && (
-                            <span className="bg-amber-500 text-white text-xs px-2 py-1 rounded-full">
+                            <span className="bg-secondary text-accent text-xs font-bold px-2 py-1 rounded-full">
                               {unreadCount} new
                             </span>
                           )}
@@ -209,7 +209,7 @@ const Navbar: React.FC = () => {
                             >
                               <div className="flex items-start space-x-3">
                                 <div className={`w-2 h-2 rounded-full mt-2 ${
-                                  !notification.isRead ? 'bg-amber-500' : 'bg-gray-600'
+                                  !notification.isRead ? 'bg-white' : 'bg-gray-600'
                                 }`}></div>
                                 <div className="flex-1">
                                   <h4 className="text-sm font-semibold text-white mb-1">
@@ -234,11 +234,11 @@ const Navbar: React.FC = () => {
                       </div>
                       
                       {notifications.length > 0 && (
-                        <div className="px-6 py-3 border-t border-gray-100">
+                        <div className="px-6 py-3 border-t border-gray-700">
                           <Link
                             to="/profile"
                             onClick={() => setIsNotificationOpen(false)}
-                            className="text-sm text-amber-600 hover:text-amber-700 font-medium"
+                            className="text-sm text-gray-300 hover:text-white font-medium"
                           >
                             View all notifications →
                           </Link>
@@ -252,19 +252,19 @@ const Navbar: React.FC = () => {
                 <div className="relative">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center space-x-3 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-500/30 transition-all duration-300 group"
+                    className="flex items-center space-x-3 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 group"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
-                      <User className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center shadow-lg">
+                      <User className="w-4 h-4 text-accent" />
                     </div>
                     <div className="text-left hidden xl:block">
                       <p className="text-sm font-bold text-white">{user.name}</p>
-                      <p className="text-[10px] text-amber-400 uppercase tracking-wider">Premium</p>
+                      <p className="text-xs text-gray-300 uppercase tracking-wider">Premium</p>
                     </div>
                   </button>
 
                   {isUserMenuOpen && (
-                    <div className="absolute right-0 mt-3 w-64 bg-[#1a1f3a] rounded-xl shadow-2xl border border-gray-700 py-2 transform transition-all duration-300 scale-100 opacity-100">
+                    <div className="absolute right-0 mt-3 w-64 bg-accent rounded-xl shadow-2xl border border-gray-700 py-2 transform transition-all duration-300 scale-100 opacity-100">
                       <div className="px-6 py-4 border-b border-gray-700">
                         <p className="text-sm font-bold text-white">{user.name}</p>
                         <p className="text-xs text-gray-400">{user.email}</p>
@@ -275,7 +275,7 @@ const Navbar: React.FC = () => {
                   className="flex items-center px-6 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors group"
                   onClick={() => setIsUserMenuOpen(false)}
                 >
-                  <User className="w-5 h-5 mr-3 text-gray-400 group-hover:text-amber-400 transition-colors" />
+                  <User className="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" />
                   <div>
                     <p className="font-medium">My Profile</p>
                     <p className="text-xs text-gray-500">View account & diamonds</p>
@@ -287,7 +287,7 @@ const Navbar: React.FC = () => {
                         className="flex items-center px-6 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors group"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        <Gem className="w-5 h-5 mr-3 text-gray-400 group-hover:text-amber-400 transition-colors" />
+                        <Gem className="w-5 h-5 mr-3 text-gray-400 group-hover:text-white transition-colors" />
                         <div>
                           <p className="font-medium">Sell Diamond</p>
                           <p className="text-xs text-gray-500">List your precious stones</p>
@@ -314,15 +314,14 @@ const Navbar: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <Link
                   to="/login"
-                  className="px-6 py-2 text-sm font-semibold text-white hover:text-amber-400 transition-colors relative group"
+                  className="px-6 py-2 text-sm font-semibold text-white hover:text-gray-300 transition-colors relative group"
                 >
                   <span>Login</span>
                 </Link>
                 <Link
                   to="/register"
-                  className="group relative px-6 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-sm font-bold rounded-lg hover:shadow-lg hover:shadow-amber-500/20 transition-all duration-300 overflow-hidden"
+                  className="group relative px-6 py-2.5 bg-secondary text-accent text-sm font-bold rounded-lg hover:shadow-lg hover:shadow-white/10 transition-all duration-300 overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="relative z-10">Join Ratna</span>
                 </Link>
               </div>
@@ -342,7 +341,7 @@ const Navbar: React.FC = () => {
 
         {/* Enhanced Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t border-gray-700 bg-[#1a1f3a]/95 backdrop-blur-lg">
+          <div className="lg:hidden border-t border-gray-700 bg-accent/95 backdrop-blur-lg">
             <div className="px-4 py-6 space-y-3">
               {navLinks.map(({ path, label, icon: Icon }) => (
                 <Link
@@ -367,7 +366,7 @@ const Navbar: React.FC = () => {
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-semibold text-white">Notifications</h4>
                       {unreadCount > 0 && (
-                        <span className="bg-amber-500 text-white text-xs px-2 py-1 rounded-full">
+                        <span className="bg-secondary text-accent text-xs font-bold px-2 py-1 rounded-full">
                           {unreadCount}
                         </span>
                       )}
@@ -391,8 +390,8 @@ const Navbar: React.FC = () => {
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center space-x-3 px-4 py-3 bg-white/5 rounded-lg border border-white/5"
                   >
-                    <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-white" />
+                    <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-accent" />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">{user.name}</p>
@@ -414,14 +413,14 @@ const Navbar: React.FC = () => {
                   <Link
                     to="/login"
                     onClick={() => setIsMenuOpen(false)}
-                    className="block px-4 py-3 text-sm font-semibold text-center text-white hover:text-amber-400 transition-colors"
+                    className="block px-4 py-3 text-sm font-semibold text-center text-white hover:text-gray-300 transition-colors"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setIsMenuOpen(false)}
-                    className="block mx-4 px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-sm font-bold rounded-lg text-center shadow-lg"
+                    className="block mx-4 px-6 py-3 bg-secondary text-accent text-sm font-bold rounded-lg text-center shadow-lg"
                   >
                     Join Ratna
                   </Link>

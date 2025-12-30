@@ -52,12 +52,12 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-amber-50 py-12">
+    <div className="min-h-screen bg-secondary py-12 pt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Contact <span className="text-amber-500">Ratna</span>
+            Contact <span className="text-accent">Ratna</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Get in touch with our diamond experts. We're here to help you find the perfect diamond or answer any questions.
@@ -68,13 +68,13 @@ const Contact: React.FC = () => {
           {/* Contact Information */}
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center">
-              <MessageCircle className="w-8 h-8 mr-3 text-amber-500" />
+              <MessageCircle className="w-8 h-8 mr-3 text-accent" />
               Get in Touch
             </h2>
             
             <div className="space-y-6">
-              <div className="flex items-start space-x-4 p-4 rounded-xl bg-gradient-to-r from-amber-50 to-yellow-50 hover:shadow-md transition-all duration-300">
-                <div className="bg-amber-500 p-3 rounded-xl">
+              <div className="flex items-start space-x-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:shadow-md transition-all duration-300">
+                <div className="bg-accent p-3 rounded-xl">
                   <Phone className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -147,7 +147,7 @@ const Contact: React.FC = () => {
           {/* Contact Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center">
-              <Send className="w-8 h-8 mr-3 text-amber-500" />
+              <Send className="w-8 h-8 mr-3 text-accent" />
               Send us a Message
             </h2>
             
@@ -164,7 +164,7 @@ const Contact: React.FC = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 hover:shadow-md"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
                     placeholder="Your full name"
                   />
                 </div>
@@ -180,7 +180,7 @@ const Contact: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 hover:shadow-md"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -197,7 +197,7 @@ const Contact: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 hover:shadow-md"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -212,7 +212,7 @@ const Contact: React.FC = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 hover:shadow-md"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
                   >
                     <option value="">Select a subject</option>
                     <option value="Diamond Inquiry">Diamond Inquiry</option>
@@ -237,7 +237,7 @@ const Contact: React.FC = () => {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 resize-vertical hover:shadow-md"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 resize-vertical hover:shadow-md"
                   placeholder="Tell us how we can help you with your diamond needs..."
                 />
               </div>
@@ -257,7 +257,7 @@ const Contact: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white py-4 px-8 rounded-xl hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transform hover:scale-105"
+                className="w-full bg-accent text-white py-4 px-8 rounded-xl hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transform hover:scale-105"
               >
                 {loading ? (
                   <>

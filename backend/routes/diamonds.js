@@ -22,11 +22,15 @@ if (!fs.existsSync(salesDir)) {
   fs.mkdirSync(salesDir, { recursive: true });
 }
 
-// Multer configuration for image uploads
+// Multer configuration for image and video uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (req.route.path.includes('/mark-sold')) {
       cb(null, salesDir);
+    } else if (file.mimetype.startsWith('video/')) {
+      // Store videos in media directory or reuse diamonds directory
+      // For simplicity using diamondsDir, but normally separate folder is better
+      cb(null, diamondsDir);
     } else {
       cb(null, diamondsDir);
     }
@@ -41,11 +45,10 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: { 
-    fileSize: 5 * 1024 * 1024, // 5MB limit
-    files: 2 // Maximum 2 files for sales (invoice + payment proof)
+    fileSize: 50 * 1024 * 1024, // 50MB limit to accommodate videos
+    files: 10 // Increased file limit
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|webp/;
     if (req.route.path.includes('/mark-sold')) {
       // For sales, allow PDF as well
       const salesAllowedTypes = /jpeg|jpg|png|webp|pdf/;
@@ -59,13 +62,18 @@ const upload = multer({
       }
     }
     
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
+    // For diamonds, allow images and videos
+    const allowedImageTypes = /jpeg|jpg|png|webp/;
+    const allowedVideoTypes = /mp4|mov|avi|mkv|webm/;
+
+    const extname = allowedImageTypes.test(path.extname(file.originalname).toLowerCase()) ||
+                   allowedVideoTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/');
 
     if (mimetype && extname) {
       return cb(null, true);
     } else {
-      cb(new Error('Only image files (JPEG, JPG, PNG, WebP) are allowed'));
+      cb(new Error('Only image files (JPEG, JPG, PNG, WebP) and video files (MP4, MOV, AVI, MKV) are allowed'));
     }
   }
 });
@@ -567,7 +575,7 @@ router.post('/:id/mark-sold', authenticateToken, upload.fields([
     }
 
     // Check ownership
-    if (diamond.seller.toString() !== req.user.userId) {
+    if (diamond.seller.toString() !== req.user.userId.toString()) {
       return res.status(403).json({ 
         success: false,
         error: 'Access denied',

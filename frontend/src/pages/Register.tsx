@@ -65,16 +65,16 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-secondary flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <div className="text-center">
             <div className="flex justify-center">
-              <div className="bg-amber-100 p-3 rounded-full">
-                <Diamond className="w-8 h-8 text-amber-600" />
+              <div className="bg-secondary p-3 rounded-full">
+                <Diamond className="w-8 h-8 text-accent" />
               </div>
             </div>
-            <h2 className="mt-4 text-3xl font-bold text-gray-900">Create Account</h2>
+            <h2 className="mt-4 text-3xl font-bold text-text">Create Account</h2>
             <p className="mt-2 text-gray-600">Join Ratna's premium diamond marketplace</p>
           </div>
 
@@ -100,7 +100,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-colors"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -120,7 +120,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-colors"
                     placeholder="Enter your email"
                   />
                 </div>
@@ -139,7 +139,7 @@ const Register: React.FC = () => {
                     autoComplete="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-colors"
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -159,7 +159,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-colors"
                     placeholder="Create a password"
                   />
                   <button
@@ -186,7 +186,7 @@ const Register: React.FC = () => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-colors"
                     placeholder="Confirm your password"
                   />
                   <button
@@ -204,7 +204,7 @@ const Register: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-accent hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold"
               >
                 {loading ? (
                   <>
@@ -225,7 +225,7 @@ const Register: React.FC = () => {
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-medium text-amber-600 hover:text-amber-500 transition-colors"
+                  className="font-medium text-accent hover:text-slate-800 transition-colors"
                 >
                   Sign in here
                 </Link>

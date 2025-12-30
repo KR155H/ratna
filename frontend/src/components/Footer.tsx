@@ -11,11 +11,11 @@ const Footer: React.FC = () => {
   };
 
   const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:text-blue-500' },
+    { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:text-blue-600' },
     { icon: Twitter, href: '#', label: 'Twitter', color: 'hover:text-sky-500' },
-    { icon: Instagram, href: '#', label: 'Instagram', color: 'hover:text-pink-500' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:text-blue-600' },
-    { icon: Youtube, href: '#', label: 'YouTube', color: 'hover:text-red-500' },
+    { icon: Instagram, href: '#', label: 'Instagram', color: 'hover:text-pink-600' },
+    { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:text-blue-700' },
+    { icon: Youtube, href: '#', label: 'YouTube', color: 'hover:text-red-600' },
   ];
 
   const quickLinks = [
@@ -33,13 +33,7 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden">
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-3xl"></div>
-      </div>
-
+    <footer className="bg-secondary text-gray-600 relative overflow-hidden border-t border-gray-200">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="py-12">
@@ -48,20 +42,19 @@ const Footer: React.FC = () => {
             <div className="space-y-4">
               <Link to="/" className="flex items-center space-x-3 group">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative bg-gradient-to-r from-amber-500 to-yellow-500 p-2 rounded-xl shadow-xl">
+                  <div className="relative bg-accent p-2 rounded-xl shadow-md">
                     <Diamond className="w-6 h-6 text-white" />
                   </div>
                 </div>
                 <div>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">
+                  <span className="text-2xl font-bold text-gray-900">
                     Ratna
                   </span>
-                  <p className="text-xs text-gray-400 font-medium tracking-wider">PREMIUM DIAMONDS</p>
+                  <p className="text-xs text-accent font-medium tracking-wider">PREMIUM DIAMONDS</p>
                 </div>
               </Link>
               
-              <p className="text-gray-300 text-sm leading-relaxed">
+              <p className="text-gray-600 text-sm leading-relaxed">
                 Discover the world's finest diamonds at Ratna. We connect discerning buyers with premium diamond sellers worldwide.
               </p>
               
@@ -70,10 +63,10 @@ const Footer: React.FC = () => {
                   <a 
                     key={index}
                     href={href} 
-                    className={`group p-2 bg-gray-800 rounded-lg ${color} transition-all duration-300 hover:scale-110 hover:shadow-lg`}
+                    className={`group p-2 bg-white rounded-lg shadow-sm border border-gray-100 ${color} transition-all duration-300 hover:scale-110 hover:shadow-md`}
                     aria-label={label}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 text-gray-500 group-hover:text-current" />
                   </a>
                 ))}
               </div>
@@ -81,15 +74,15 @@ const Footer: React.FC = () => {
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-lg font-bold mb-4 text-amber-400">Quick Links</h3>
+              <h3 className="text-lg font-bold mb-4 text-gray-900">Quick Links</h3>
               <ul className="space-y-2">
                 {quickLinks.map(({ to, label }, index) => (
                   <li key={index}>
                     <Link 
                       to={to} 
-                      className="group flex items-center text-gray-300 hover:text-amber-400 transition-all duration-300 py-1"
+                      className="group flex items-center text-gray-600 hover:text-accent transition-all duration-300 py-1"
                     >
-                      <div className="w-1 h-1 bg-amber-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="w-1 h-1 bg-accent rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <span className="group-hover:translate-x-1 transition-transform duration-300 text-sm">{label}</span>
                     </Link>
                   </li>
@@ -99,15 +92,15 @@ const Footer: React.FC = () => {
 
             {/* Services */}
             <div>
-              <h3 className="text-lg font-bold mb-4 text-amber-400">Our Services</h3>
+              <h3 className="text-lg font-bold mb-4 text-gray-900">Our Services</h3>
               <ul className="space-y-2">
                 {services.map(({ href, label }, index) => (
                   <li key={index}>
                     <a 
                       href={href} 
-                      className="group flex items-center text-gray-300 hover:text-amber-400 transition-all duration-300 py-1"
+                      className="group flex items-center text-gray-600 hover:text-accent transition-all duration-300 py-1"
                     >
-                      <Star className="w-3 h-3 mr-3 group-hover:text-amber-500 transition-colors" />
+                      <Star className="w-3 h-3 mr-3 text-gray-400 group-hover:text-accent transition-colors" />
                       <span className="group-hover:translate-x-1 transition-transform duration-300 text-sm">{label}</span>
                     </a>
                   </li>
@@ -117,32 +110,32 @@ const Footer: React.FC = () => {
 
             {/* Contact & Newsletter */}
             <div>
-              <h3 className="text-lg font-bold mb-4 text-amber-400">Stay Connected</h3>
+              <h3 className="text-lg font-bold mb-4 text-gray-900">Stay Connected</h3>
               <div className="space-y-3">
-                <div className="flex items-center space-x-3 text-gray-300 text-sm">
-                  <Phone className="w-4 h-4 text-amber-400" />
+                <div className="flex items-center space-x-3 text-gray-600 text-sm">
+                  <Phone className="w-4 h-4 text-accent" />
                   <span>+1 (555) 123-4567</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-300 text-sm">
-                  <Mail className="w-4 h-4 text-amber-400" />
+                <div className="flex items-center space-x-3 text-gray-600 text-sm">
+                  <Mail className="w-4 h-4 text-accent" />
                   <span>info@ratna.com</span>
                 </div>
-                <div className="flex items-center space-x-3 text-gray-300 text-sm">
-                  <MapPin className="w-4 h-4 text-amber-400" />
+                <div className="flex items-center space-x-3 text-gray-600 text-sm">
+                  <MapPin className="w-4 h-4 text-accent" />
                   <span>New York, NY</span>
                 </div>
               </div>
 
               {/* Newsletter Signup */}
               <div className="mt-6">
-                <h4 className="text-sm font-semibold text-gray-300 mb-3">Newsletter</h4>
+                <h4 className="text-sm font-semibold text-gray-900 mb-3">Newsletter</h4>
                 <div className="flex">
                   <input
                     type="email"
                     placeholder="Your email"
-                    className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-l-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-l-lg text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                   />
-                  <button className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-r-lg hover:shadow-lg transition-all duration-300">
+                  <button className="px-4 py-2 bg-accent text-white rounded-r-lg hover:bg-opacity-90 transition-all duration-300">
                     <Send className="w-4 h-4" />
                   </button>
                 </div>
@@ -152,30 +145,30 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-700/50 py-6">
+        <div className="border-t border-gray-200 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-center md:text-left mb-4 md:mb-0">
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-500 text-sm">
                 &copy; 2024 Ratna Diamond Marketplace. All rights reserved.
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-400 mt-1">
                 Built with <Heart className="w-3 h-3 inline text-red-500" /> for diamond enthusiasts worldwide
               </p>
             </div>
             
             <div className="flex items-center space-x-6">
               <div className="flex space-x-4">
-                <a href="#" className="text-xs text-gray-400 hover:text-amber-400 transition-colors">
+                <a href="#" className="text-xs text-gray-500 hover:text-accent transition-colors">
                   Privacy Policy
                 </a>
-                <a href="#" className="text-xs text-gray-400 hover:text-amber-400 transition-colors">
+                <a href="#" className="text-xs text-gray-500 hover:text-accent transition-colors">
                   Terms of Service
                 </a>
               </div>
               
               <button
                 onClick={scrollToTop}
-                className="group p-2 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+                className="group p-2 bg-accent rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-110"
               >
                 <ArrowUp className="w-4 h-4 text-white group-hover:-translate-y-1 transition-transform" />
               </button>
