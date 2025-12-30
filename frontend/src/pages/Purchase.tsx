@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Search, ListFilter as Filter, Diamond, Eye, Heart, Star, User, Calendar, ExternalLink, MessageCircle, Video } from 'lucide-react';
+import { Search, ListFilter as Filter, Diamond, Eye, Heart, Star, User, Calendar, ExternalLink, MessageCircle, Video, Scale, X, Check } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import { useAuth } from '../context/AuthContext';
+import { useCompare } from '../context/CompareContext';
 
 interface Diamond {
   _id: string;
@@ -32,6 +33,7 @@ interface Diamond {
 }
 
 const Purchase: React.FC = () => {
+  const location = useLocation();
   const [diamonds, setDiamonds] = useState<Diamond[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -47,6 +49,9 @@ const Purchase: React.FC = () => {
   const [inquiryError, setInquiryError] = useState('');
   const { formatPrice } = useCurrency();
   const { user, token } = useAuth();
+  const { compareList, addToCompare, removeFromCompare, isInCompare, clearCompare } = useCompare();
+  const [showCompareModal, setShowCompareModal] = useState(false);
+
   const [filters, setFilters] = useState({
     cut: '',
     color: '',
@@ -67,6 +72,17 @@ const Purchase: React.FC = () => {
   
   const colors = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
   const clarities = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
+
+  // Initialize filters from URL params
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const cut = searchParams.get('cut');
+    if (cut) {
+      setFilters(prev => ({ ...prev, cut }));
+      // Also open filters to show it's active
+      setShowFilters(true);
+    }
+  }, [location.search]);
 
   const fetchDiamonds = async () => {
     try {
@@ -105,7 +121,7 @@ const Purchase: React.FC = () => {
 
   useEffect(() => {
     fetchDiamonds();
-  }, [sortBy, sortOrder]);
+  }, [sortBy, sortOrder, filters]); // Added filters to dependency array
 
   const handleSearch = () => {
     fetchDiamonds();
@@ -120,7 +136,7 @@ const Purchase: React.FC = () => {
 
   const applyFilters = () => {
     fetchDiamonds();
-    setShowFilters(false);
+    // setShowFilters(false); // Keep filters open to refine
   };
 
   const clearFilters = () => {
@@ -134,7 +150,7 @@ const Purchase: React.FC = () => {
       maxCarat: ''
     });
     setSearchTerm('');
-    fetchDiamonds();
+    // fetchDiamonds will be triggered by useEffect on filters change
   };
 
   const formatDate = (dateString: string) => {
@@ -199,7 +215,9 @@ const Purchase: React.FC = () => {
 
   const DiamondModal = ({ diamond, onClose }: { diamond: Diamond; onClose: () => void }) => {
     const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-    const mediaItems = diamond.media || [{ type: 'image', url: diamond.image }];
+    const mediaItems = diamond.media && diamond.media.length > 0
+      ? diamond.media
+      : [{ type: 'image', url: diamond.image }];
 
     return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -209,13 +227,13 @@ const Purchase: React.FC = () => {
             onClick={onClose}
             className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all"
           >
-            ×
+            <X className="w-5 h-5 text-gray-600" />
           </button>
           
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="relative">
               {/* Media Display */}
-              <div className="relative h-96 lg:h-full">
+              <div className="relative h-96 lg:h-full bg-gray-100 flex items-center justify-center">
                 {mediaItems[currentMediaIndex].type === 'image' ? (
                   <img
                     src={mediaItems[currentMediaIndex].url || 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg'}
@@ -231,6 +249,7 @@ const Purchase: React.FC = () => {
                     src={mediaItems[currentMediaIndex].url}
                     className="w-full h-full object-cover"
                     controls
+                    controlsList="nodownload"
                   />
                 )}
                 
@@ -255,65 +274,60 @@ const Purchase: React.FC = () => {
               
               {/* Media Thumbnails */}
               {mediaItems.length > 1 && (
-                <div className="absolute bottom-4 left-4 right-4 flex space-x-2 overflow-x-auto">
+                <div className="absolute bottom-4 left-4 right-4 flex space-x-2 overflow-x-auto pb-2">
                   {mediaItems.map((media, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentMediaIndex(index)}
-                      className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${
-                        currentMediaIndex === index ? 'border-accent' : 'border-white'
+                      className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 ${
+                        currentMediaIndex === index ? 'border-gold' : 'border-white'
                       }`}
                     >
                       {media.type === 'image' ? (
                         <img src={media.url} alt="" className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                          <Video className="w-6 h-6 text-white" />
+                          <Video className="w-5 h-5 text-white" />
                         </div>
                       )}
                     </button>
                   ))}
                 </div>
               )}
-              
-              <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                <Eye className="w-4 h-4 mr-1" />
-                {diamond.views} views
-              </div>
             </div>
             
             <div className="p-8">
               <div className="mb-6">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{diamond.name}</h2>
-                <p className="text-4xl font-bold text-accent">{formatPrice(diamond.price)}</p>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2 font-serif">{diamond.name}</h2>
+                <p className="text-4xl font-bold text-accent font-serif">{formatPrice(diamond.price)}</p>
                 <p className="text-gray-600">{formatPrice(Math.round(diamond.price / diamond.carat))} per carat</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600">Carat Weight</p>
-                  <p className="text-lg font-semibold">{diamond.carat}</p>
+                <div className="bg-secondary p-4 rounded-lg border border-gray-100">
+                  <p className="text-sm text-gray-500 uppercase tracking-wide">Carat</p>
+                  <p className="text-xl font-bold text-accent">{diamond.carat}</p>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600">Cut</p>
-                  <p className="text-lg font-semibold">{diamond.cut}</p>
+                <div className="bg-secondary p-4 rounded-lg border border-gray-100">
+                  <p className="text-sm text-gray-500 uppercase tracking-wide">Cut</p>
+                  <p className="text-xl font-bold text-accent">{diamond.cut}</p>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600">Color</p>
-                  <p className="text-lg font-semibold">{diamond.color}</p>
+                <div className="bg-secondary p-4 rounded-lg border border-gray-100">
+                  <p className="text-sm text-gray-500 uppercase tracking-wide">Color</p>
+                  <p className="text-xl font-bold text-accent">{diamond.color}</p>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600">Clarity</p>
-                  <p className="text-lg font-semibold">{diamond.clarity}</p>
+                <div className="bg-secondary p-4 rounded-lg border border-gray-100">
+                  <p className="text-sm text-gray-500 uppercase tracking-wide">Clarity</p>
+                  <p className="text-xl font-bold text-accent">{diamond.clarity}</p>
                 </div>
               </div>
 
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-2">Description</h3>
-                <p className="text-gray-700 leading-relaxed">{diamond.description}</p>
+                <p className="text-gray-600 leading-relaxed">{diamond.description}</p>
               </div>
 
-              <div className="mb-6 p-4 bg-secondary rounded-lg">
+              <div className="mb-6 p-4 bg-secondary rounded-lg border-l-4 border-gold">
                 <div className="flex items-center mb-2">
                   <User className="w-5 h-5 text-accent mr-2" />
                   <h3 className="text-lg font-semibold text-gray-900">Seller Information</h3>
@@ -328,7 +342,7 @@ const Purchase: React.FC = () => {
                         href={diamond.certification.certificateUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-accent text-sm hover:underline"
+                        className="text-gold hover:text-gold-hover text-sm hover:underline font-medium"
                       >
                         View Certificate →
                       </a>
@@ -345,9 +359,22 @@ const Purchase: React.FC = () => {
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Send Inquiry
                 </button>
-                <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center">
-                  <Heart className="w-5 h-5 mr-2" />
-                  Save
+                <button
+                  onClick={() => {
+                    if (isInCompare(diamond._id)) {
+                      removeFromCompare(diamond._id);
+                    } else {
+                      addToCompare(diamond);
+                    }
+                  }}
+                  className={`px-6 py-3 border rounded-lg transition-all duration-300 flex items-center ${
+                    isInCompare(diamond._id)
+                      ? 'bg-gold text-white border-gold hover:bg-gold-hover'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <Scale className="w-5 h-5 mr-2" />
+                  {isInCompare(diamond._id) ? 'Added' : 'Compare'}
                 </button>
               </div>
             </div>
@@ -357,7 +384,68 @@ const Purchase: React.FC = () => {
     </div>
   )};
 
-  if (loading) {
+  const CompareModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-8">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold font-serif text-accent">Compare Diamonds</h2>
+            <button onClick={() => setShowCompareModal(false)} className="text-gray-400 hover:text-gray-600">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="p-4 text-left min-w-[150px]">Feature</th>
+                  {compareList.map(d => (
+                    <th key={d._id} className="p-4 text-center min-w-[200px] relative">
+                      <button
+                        onClick={() => removeFromCompare(d._id)}
+                        className="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      <img
+                        src={d.image || 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg'}
+                        className="w-24 h-24 object-cover mx-auto rounded-lg mb-2"
+                        alt={d.name}
+                      />
+                      <p className="font-serif font-bold text-gray-900 truncate">{d.name}</p>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {[
+                  { label: 'Price', value: (d: Diamond) => <span className="font-bold text-accent">{formatPrice(d.price)}</span> },
+                  { label: 'Price/Carat', value: (d: Diamond) => formatPrice(Math.round(d.price / d.carat)) },
+                  { label: 'Carat', value: (d: Diamond) => d.carat },
+                  { label: 'Cut', value: (d: Diamond) => d.cut },
+                  { label: 'Color', value: (d: Diamond) => d.color },
+                  { label: 'Clarity', value: (d: Diamond) => d.clarity },
+                  { label: 'Seller', value: (d: Diamond) => d.sellerName },
+                ].map((row, i) => (
+                  <tr key={i} className={i % 2 === 0 ? 'bg-secondary' : 'bg-white'}>
+                    <td className="p-4 font-semibold text-gray-600">{row.label}</td>
+                    {compareList.map(d => (
+                      <td key={d._id} className="p-4 text-center text-gray-800">
+                        {row.value(d)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (loading && diamonds.length === 0) {
     return (
       <div className="min-h-screen bg-secondary flex items-center justify-center">
         <div className="text-center">
@@ -365,24 +453,24 @@ const Purchase: React.FC = () => {
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-accent mx-auto mb-4"></div>
             <Diamond className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-accent animate-pulse" />
           </div>
-          <p className="text-gray-600 text-lg">Discovering premium diamonds...</p>
+          <p className="text-gray-600 text-lg font-serif">Curating collection...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-secondary pt-28">
+    <div className="min-h-screen bg-secondary pt-28 pb-24">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 flex items-center mb-2">
-                <Diamond className="w-10 h-10 mr-4 text-accent animate-pulse" />
-                Premium Diamond Collection
+              <h1 className="text-4xl font-bold text-accent flex items-center mb-2 font-serif">
+                <Diamond className="w-10 h-10 mr-4 text-gold animate-pulse" />
+                Premium Collection
               </h1>
-              <p className="text-xl text-gray-600">Discover exceptional diamonds from verified sellers worldwide</p>
+              <p className="text-xl text-gray-600 font-light">Exceptional diamonds from verified sellers</p>
             </div>
             
             <div className="mt-6 md:mt-0 flex items-center space-x-4">
@@ -393,7 +481,7 @@ const Purchase: React.FC = () => {
                   setSortBy(sort);
                   setSortOrder(order);
                 }}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md bg-white text-gray-700 cursor-pointer"
               >
                 <option value="createdAt-desc">Newest First</option>
                 <option value="createdAt-asc">Oldest First</option>
@@ -415,23 +503,25 @@ const Purchase: React.FC = () => {
               <Search className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search diamonds by name, cut, or seller..."
+                placeholder="Search by name, cut, or seller..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md bg-gray-50"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={handleSearch}
-                className="px-8 py-3 bg-accent text-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                className="px-8 py-3 bg-accent text-white rounded-xl hover:bg-accent-hover hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-medium"
               >
                 Search
               </button>
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="px-8 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 flex items-center transform hover:scale-105"
+                className={`px-8 py-3 border rounded-xl transition-all duration-300 flex items-center transform hover:scale-105 ${
+                  showFilters ? 'border-accent text-accent bg-blue-50' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
               >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
@@ -554,7 +644,7 @@ const Purchase: React.FC = () => {
         )}
 
         {/* Results */}
-        <div className="mb-8">
+        <div className="mb-8 flex justify-between items-center">
           <p className="text-lg text-gray-600">
             {diamonds.length === 0 ? 'No diamonds found' : `${diamonds.length} premium diamond${diamonds.length !== 1 ? 's' : ''} available`}
           </p>
@@ -571,31 +661,51 @@ const Purchase: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {diamonds.map((diamond) => (
               <div key={diamond._id} className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
-                <div className="relative overflow-hidden">
+                <div className="relative overflow-hidden h-64">
                   <img
                     src={diamond.image || 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg'}
                     alt={diamond.name}
-                    className="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="absolute top-3 right-3 bg-black bg-opacity-60 text-white px-3 py-1 rounded-full text-sm flex items-center backdrop-blur-sm">
                     <Eye className="w-3 h-3 mr-1" />
                     {diamond.views}
                   </div>
                   <div className="absolute top-3 left-3">
-                    <span className="bg-accent text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                      {diamond.status.toUpperCase()}
+                    <span className="bg-white text-accent px-3 py-1 rounded-full text-xs font-bold shadow-lg uppercase tracking-wider">
+                      {diamond.status}
                     </span>
                   </div>
+
+                  {/* Quick Compare Action */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isInCompare(diamond._id)) {
+                        removeFromCompare(diamond._id);
+                      } else {
+                        addToCompare(diamond);
+                      }
+                    }}
+                    className={`absolute bottom-3 right-3 p-2 rounded-full shadow-lg transition-transform transform ${
+                      isInCompare(diamond._id)
+                        ? 'bg-gold text-white scale-110'
+                        : 'bg-white text-gray-600 hover:scale-110 hover:text-gold'
+                    }`}
+                    title="Compare"
+                  >
+                    <Scale className="w-5 h-5" />
+                  </button>
                 </div>
                 
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-gray-800 group-hover:text-accent transition-colors duration-300">{diamond.name}</h3>
+                    <h3 className="text-xl font-bold text-accent font-serif group-hover:text-gold transition-colors duration-300">{diamond.name}</h3>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 mb-4">
@@ -617,27 +727,18 @@ const Purchase: React.FC = () => {
                     </div>
                   </div>
                   
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
-                    {diamond.description}
-                  </p>
-                  
-                  <div className="flex items-center text-sm text-gray-500 mb-6 bg-secondary p-3 rounded-lg">
-                    <User className="w-4 h-4 mr-2 text-accent" />
-                    <span className="mr-4 font-medium">{diamond.sellerName}</span>
-                    <Calendar className="w-4 h-4 mr-1 text-accent" />
-                    <span>{formatDate(diamond.createdAt)}</span>
+                  <div className="flex items-center text-sm text-gray-500 mb-6 border-t border-gray-100 pt-4">
+                    <User className="w-4 h-4 mr-2 text-gold" />
+                    <span className="mr-4 font-medium truncate">{diamond.sellerName}</span>
                   </div>
                   
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <p className="text-3xl font-bold text-gray-900">{formatPrice(diamond.price)}</p>
-                      <p className="text-sm text-accent font-semibold">
-                        {formatPrice(Math.round(diamond.price / diamond.carat))}/carat
-                      </p>
+                      <p className="text-3xl font-bold text-accent font-serif">{formatPrice(diamond.price)}</p>
                     </div>
                     <div className="flex items-center space-x-1">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                        <Star key={i} className="w-4 h-4 text-gold fill-current" />
                       ))}
                     </div>
                   </div>
@@ -645,14 +746,14 @@ const Purchase: React.FC = () => {
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setSelectedDiamond(diamond)}
-                      className="flex-1 px-4 py-3 bg-accent text-white rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
+                      className="flex-1 px-4 py-3 bg-accent text-white rounded-xl hover:bg-accent-hover hover:shadow-lg transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Details
                     </button>
                     <button
                       onClick={() => handleInquire(diamond)}
-                      className="flex-1 px-4 py-3 bg-green-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
+                      className="flex-1 px-4 py-3 border border-accent text-accent rounded-xl hover:bg-accent hover:text-white transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Inquire
@@ -672,13 +773,55 @@ const Purchase: React.FC = () => {
           />
         )}
 
+        {/* Compare Floating Bar */}
+        {compareList.length > 0 && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-2xl p-4 z-40 transform translate-y-0 transition-transform animate-fade-in-up">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="flex -space-x-2">
+                  {compareList.map(d => (
+                    <img
+                      key={d._id}
+                      src={d.image || 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg'}
+                      className="w-12 h-12 rounded-full border-2 border-white object-cover"
+                      alt={d.name}
+                    />
+                  ))}
+                </div>
+                <div>
+                  <p className="font-bold text-accent">{compareList.length} Selected</p>
+                  <p className="text-xs text-gray-500">Up to 4 diamonds</p>
+                </div>
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  onClick={clearCompare}
+                  className="px-4 py-2 text-gray-600 hover:text-red-500 text-sm font-medium"
+                >
+                  Clear All
+                </button>
+                <button
+                  onClick={() => setShowCompareModal(true)}
+                  className="px-6 py-2 bg-gold text-white rounded-lg hover:bg-gold-hover transition-colors shadow-lg flex items-center"
+                >
+                  <Scale className="w-4 h-4 mr-2" />
+                  Compare Now
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Compare Modal */}
+        {showCompareModal && <CompareModal />}
+
         {/* Inquiry Modal */}
         {showInquiryModal && inquiryDiamond && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">Send Inquiry</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 font-serif">Send Inquiry</h2>
                   <button
                     onClick={() => setShowInquiryModal(false)}
                     className="text-gray-400 hover:text-gray-600"
@@ -688,7 +831,7 @@ const Purchase: React.FC = () => {
                 </div>
 
                 {/* Diamond Info */}
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
                   <div className="flex items-center space-x-4">
                     <img
                       src={inquiryDiamond.image || 'https://images.pexels.com/photos/1232218/pexels-photo-1232218.jpeg'}
@@ -700,7 +843,7 @@ const Purchase: React.FC = () => {
                       }}
                     />
                     <div>
-                      <h3 className="font-semibold text-gray-900">{inquiryDiamond.name}</h3>
+                      <h3 className="font-semibold text-gray-900 font-serif">{inquiryDiamond.name}</h3>
                       <p className="text-accent font-bold">{formatPrice(inquiryDiamond.price)}</p>
                       <p className="text-sm text-gray-600">Seller: {inquiryDiamond.sellerName}</p>
                     </div>

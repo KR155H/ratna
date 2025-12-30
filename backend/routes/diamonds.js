@@ -260,7 +260,7 @@ router.post('/', authenticateToken, upload.array('media', 10), async (req, res) 
     // Process uploaded media files
     const mediaFiles = req.files.map(file => ({
       type: file.mimetype.startsWith('image/') ? 'image' : 'video',
-      url: `http://localhost:5000/uploads/media/${file.filename}`,
+      url: `http://localhost:5000/uploads/diamonds/${file.filename}`,
       filename: file.filename,
       size: file.size
     }));

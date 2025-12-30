@@ -123,11 +123,11 @@ const Navbar: React.FC = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-white/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative bg-white/10 p-2.5 rounded-xl group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110 border border-white/20">
-                <Diamond className="w-6 h-6 text-white" />
+                <Diamond className="w-6 h-6 text-gold" />
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold text-white tracking-tight">
+              <span className="text-2xl font-bold text-white tracking-tight font-serif">
                 Ratna
               </span>
               <span className="text-[10px] text-gray-300 font-medium tracking-[0.2em] uppercase">Premium Diamonds</span>
