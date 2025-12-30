@@ -50,6 +50,17 @@ const Messages: React.FC = () => {
   const [replyText, setReplyText] = useState('');
   const [replyLoading, setReplyLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (selectedMessage) {
+      scrollToBottom();
+    }
+  }, [selectedMessage?.replies]);
 
   useEffect(() => {
     if (user && token) {
@@ -366,25 +377,55 @@ const Messages: React.FC = () => {
                 </div>
 
                 {/* Message Content */}
-                <div className="p-6 max-h-96 overflow-y-auto">
+                <div className="flex-1 p-6 overflow-y-auto bg-gray-50 min-h-[400px] max-h-[600px]">
                   <div className="space-y-6">
                     {/* Original Message */}
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-gray-800 leading-relaxed">{selectedMessage.message}</p>
+                    <div className={`flex flex-col ${selectedMessage.sender._id === user.id ? 'items-end' : 'items-start'}`}>
+                      <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${
+                        selectedMessage.sender._id === user.id
+                          ? 'bg-blue-600 text-white rounded-tr-none'
+                          : 'bg-white text-gray-800 rounded-tl-none'
+                      }`}>
+                        <div className="flex items-center justify-between mb-1 gap-4">
+                          <span className={`text-xs font-semibold ${
+                            selectedMessage.sender._id === user.id ? 'text-blue-100' : 'text-gray-500'
+                          }`}>
+                            {selectedMessage.sender.name}
+                          </span>
+                          <span className={`text-xs ${
+                            selectedMessage.sender._id === user.id ? 'text-blue-100' : 'text-gray-400'
+                          }`}>
+                            {formatDate(selectedMessage.createdAt)}
+                          </span>
+                        </div>
+                        <p className="leading-relaxed whitespace-pre-wrap">{selectedMessage.message}</p>
+                      </div>
                     </div>
 
                     {/* Replies */}
-                    {selectedMessage.replies.map((reply, index) => (
-                      <div key={index} className={`p-4 rounded-lg ${
-                        reply.sender._id === user.id ? 'bg-blue-50 ml-8' : 'bg-gray-50 mr-8'
-                      }`}>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-900">{reply.sender.name}</span>
-                          <span className="text-xs text-gray-500">{formatDate(reply.sentAt)}</span>
+                    {selectedMessage.replies.map((reply, index) => {
+                      const isMe = reply.sender._id === user.id;
+                      return (
+                        <div key={index} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                          <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${
+                            isMe
+                              ? 'bg-blue-600 text-white rounded-tr-none'
+                              : 'bg-white text-gray-800 rounded-tl-none'
+                          }`}>
+                            <div className="flex items-center justify-between mb-1 gap-4">
+                              <span className={`text-xs font-semibold ${isMe ? 'text-blue-100' : 'text-gray-500'}`}>
+                                {reply.sender.name}
+                              </span>
+                              <span className={`text-xs ${isMe ? 'text-blue-100' : 'text-gray-400'}`}>
+                                {formatDate(reply.sentAt)}
+                              </span>
+                            </div>
+                            <p className="leading-relaxed whitespace-pre-wrap">{reply.message}</p>
+                          </div>
                         </div>
-                        <p className="text-gray-800 leading-relaxed">{reply.message}</p>
-                      </div>
-                    ))}
+                      );
+                    })}
+                    <div ref={messagesEndRef} />
                   </div>
                 </div>
 
