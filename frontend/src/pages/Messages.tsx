@@ -187,14 +187,14 @@ const Messages: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center pt-20">
+      <div className="min-h-screen bg-secondary flex items-center justify-center pt-20">
         <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
           <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Access Denied</h2>
           <p className="text-gray-600 mb-6">Please login to view your messages</p>
           <button
             onClick={() => navigate('/login')}
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+            className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors"
           >
             Login Now
           </button>
@@ -204,12 +204,12 @@ const Messages: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 pt-28">
+    <div className="min-h-screen bg-secondary py-8 pt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-gray-100">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center">
               <MessageCircle className="w-8 h-8 text-white" />
             </div>
             <div>
@@ -222,7 +222,7 @@ const Messages: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Messages List */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
               {/* Tabs */}
               <div className="border-b border-gray-200">
                 <nav className="flex">
@@ -230,7 +230,7 @@ const Messages: React.FC = () => {
                     onClick={() => setActiveTab('inbox')}
                     className={`flex-1 py-4 px-6 text-sm font-medium transition-colors ${
                       activeTab === 'inbox'
-                        ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
+                        ? 'border-b-2 border-accent text-accent bg-secondary'
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -248,7 +248,7 @@ const Messages: React.FC = () => {
                     onClick={() => setActiveTab('sent')}
                     className={`flex-1 py-4 px-6 text-sm font-medium transition-colors ${
                       activeTab === 'sent'
-                        ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
+                        ? 'border-b-2 border-accent text-accent bg-secondary'
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
@@ -264,7 +264,7 @@ const Messages: React.FC = () => {
               <div className="max-h-96 overflow-y-auto">
                 {loading ? (
                   <div className="p-8 text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading messages...</p>
                   </div>
                 ) : error ? (
@@ -281,16 +281,16 @@ const Messages: React.FC = () => {
                     <div
                       key={message._id}
                       onClick={() => handleMessageClick(message)}
-                      className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
-                        selectedMessage?._id === message._id ? 'bg-blue-50 border-blue-200' : ''
+                      className={`p-4 border-b border-gray-100 hover:bg-secondary cursor-pointer transition-colors ${
+                        selectedMessage?._id === message._id ? 'bg-secondary border-accent' : ''
                       } ${
-                        !message.isRead && activeTab === 'inbox' ? 'bg-blue-25' : ''
+                        !message.isRead && activeTab === 'inbox' ? 'bg-blue-50' : ''
                       }`}
                     >
                       <div className="flex items-start space-x-3">
                         <div className="flex-shrink-0">
                           {!message.isRead && activeTab === 'inbox' ? (
-                            <MailOpen className="w-5 h-5 text-blue-500" />
+                            <MailOpen className="w-5 h-5 text-accent" />
                           ) : (
                             <Mail className="w-5 h-5 text-gray-400" />
                           )}
@@ -298,7 +298,7 @@ const Messages: React.FC = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <p className={`text-sm font-medium truncate ${
-                              !message.isRead && activeTab === 'inbox' ? 'text-blue-900' : 'text-gray-900'
+                              !message.isRead && activeTab === 'inbox' ? 'text-gray-900' : 'text-gray-900'
                             }`}>
                               {activeTab === 'inbox' ? message.sender.name : message.receiver.name}
                             </p>
@@ -307,7 +307,7 @@ const Messages: React.FC = () => {
                             </p>
                           </div>
                           <p className={`text-sm truncate ${
-                            !message.isRead && activeTab === 'inbox' ? 'text-blue-800' : 'text-gray-600'
+                            !message.isRead && activeTab === 'inbox' ? 'text-accent' : 'text-gray-600'
                           }`}>
                             {message.subject}
                           </p>
@@ -326,9 +326,9 @@ const Messages: React.FC = () => {
           {/* Message Detail */}
           <div className="lg:col-span-2">
             {selectedMessage ? (
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
                 {/* Message Header */}
-                <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
+                <div className="p-6 border-b border-gray-200 bg-secondary">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h2 className="text-xl font-bold text-gray-900 mb-2">{selectedMessage.subject}</h2>
@@ -370,7 +370,7 @@ const Messages: React.FC = () => {
                       />
                       <div>
                         <h3 className="font-semibold text-gray-900">{selectedMessage.diamond.name}</h3>
-                        <p className="text-blue-600 font-bold">{formatPrice(selectedMessage.diamond.price)}</p>
+                        <p className="text-accent font-bold">{formatPrice(selectedMessage.diamond.price)}</p>
                       </div>
                     </div>
                   </div>
@@ -383,7 +383,7 @@ const Messages: React.FC = () => {
                     <div className={`flex flex-col ${selectedMessage.sender._id === user.id ? 'items-end' : 'items-start'}`}>
                       <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${
                         selectedMessage.sender._id === user.id
-                          ? 'bg-blue-600 text-white rounded-tr-none'
+                          ? 'bg-accent text-white rounded-tr-none'
                           : 'bg-white text-gray-800 rounded-tl-none'
                       }`}>
                         <div className="flex items-center justify-between mb-1 gap-4">
@@ -409,7 +409,7 @@ const Messages: React.FC = () => {
                         <div key={index} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                           <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${
                             isMe
-                              ? 'bg-blue-600 text-white rounded-tr-none'
+                              ? 'bg-accent text-white rounded-tr-none'
                               : 'bg-white text-gray-800 rounded-tl-none'
                           }`}>
                             <div className="flex items-center justify-between mb-1 gap-4">
@@ -430,7 +430,7 @@ const Messages: React.FC = () => {
                 </div>
 
                 {/* Reply Form */}
-                <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <div className="p-6 border-t border-gray-200 bg-secondary">
                   <form onSubmit={handleReply} className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -440,7 +440,7 @@ const Messages: React.FC = () => {
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
                         rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent resize-vertical"
                         placeholder="Type your reply..."
                         required
                       />
@@ -449,7 +449,7 @@ const Messages: React.FC = () => {
                       <button
                         type="submit"
                         disabled={replyLoading || !replyText.trim()}
-                        className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                        className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                       >
                         {replyLoading ? (
                           <>
@@ -468,7 +468,7 @@ const Messages: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+              <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-100">
                 <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">Select a Message</h3>
                 <p className="text-gray-500">Choose a message from the list to view its details</p>

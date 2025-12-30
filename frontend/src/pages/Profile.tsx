@@ -165,20 +165,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleAadhaarChangeOld = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const formatted = formatAadhaar(value);
-    
-    // Limit to 14 characters (12 digits + 2 spaces)
-    if (formatted.length <= 14) {
-      setVerificationForm(prev => ({ ...prev, aadhaarNumber: formatted }));
-      
-      // Validate Aadhaar
-      const validation = validateAadhaarWithMessage(formatted);
-      setAadhaarValidation(validation);
-    }
-  };
-
   const handleVerificationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setVerificationLoading(true);
@@ -365,7 +351,7 @@ const Profile: React.FC = () => {
           <p className="text-gray-600 mb-6">Please login to view your profile</p>
           <button
             onClick={() => navigate('/login')}
-            className="w-full bg-amber-500 text-white py-2 px-4 rounded-lg hover:bg-amber-600 transition-colors"
+            className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors"
           >
             Login Now
           </button>
@@ -378,7 +364,7 @@ const Profile: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center pt-20">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-amber-200 border-t-amber-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-accent mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg">Loading your profile...</p>
         </div>
       </div>
@@ -391,7 +377,7 @@ const Profile: React.FC = () => {
         {/* Profile Header */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <div className="flex items-center space-x-6">
-            <div className="w-20 h-20 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full flex items-center justify-center">
+            <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center">
               <User className="w-10 h-10 text-white" />
             </div>
             <div className="flex-1">
@@ -409,13 +395,13 @@ const Profile: React.FC = () => {
         </div>
 
         {/* Verification Status Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border-l-4 border-amber-500">
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border-l-4 border-accent">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className={`p-3 rounded-full ${
                 verification?.status === 'approved' ? 'bg-green-100' :
                 verification?.status === 'pending' ? 'bg-yellow-100' :
-                verification?.status === 'rejected' ? 'bg-red-100' : 'bg-gray-100'
+                verification?.status === 'rejected' ? 'bg-red-100' : 'bg-secondary'
               }`}>
                 {verification ? getVerificationIcon(verification.status) : <Shield className="w-5 h-5 text-gray-500" />}
               </div>
@@ -443,7 +429,7 @@ const Profile: React.FC = () => {
               {!verification && (
                 <button
                   onClick={() => user?.role !== 'seller' && setShowVerificationModal(true)}
-                  className="px-6 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors"
+                  className="px-6 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                 >
                   Start Verification
                 </button>
@@ -479,7 +465,7 @@ const Profile: React.FC = () => {
                   onClick={() => setActiveTab(id)}
                   className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                     activeTab === id
-                      ? 'border-amber-500 text-amber-600'
+                      ? 'border-accent text-accent'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
@@ -521,15 +507,15 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-r from-amber-50 to-amber-100 p-6 rounded-xl">
+                <div className="bg-secondary p-6 rounded-xl">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-amber-600 text-sm font-medium">Total Value</p>
-                      <p className="text-2xl font-bold text-amber-900">
+                      <p className="text-gray-600 text-sm font-medium">Total Value</p>
+                      <p className="text-2xl font-bold text-gray-900">
                         {formatPrice(diamonds.reduce((sum, d) => sum + d.price, 0))}
                       </p>
                     </div>
-                    <DollarSign className="w-8 h-8 text-amber-500" />
+                    <DollarSign className="w-8 h-8 text-accent" />
                   </div>
                 </div>
               </div>
@@ -542,7 +528,7 @@ const Profile: React.FC = () => {
                   <h2 className="text-2xl font-bold text-gray-900">My Diamonds</h2>
                   <button
                     onClick={() => navigate('/sell')}
-                    className="px-6 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors"
+                    className="px-6 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                   >
                     Add New Diamond
                   </button>
@@ -555,7 +541,7 @@ const Profile: React.FC = () => {
                     <p className="text-gray-500 mb-6">Start by adding your first diamond to the marketplace</p>
                     <button
                       onClick={() => navigate('/sell')}
-                      className="px-6 py-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors"
+                      className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                     >
                       List Your First Diamond
                     </button>
@@ -651,7 +637,7 @@ const Profile: React.FC = () => {
                           console.error('Error marking all as read:', error);
                         }
                       }}
-                      className="text-sm text-amber-600 hover:text-amber-700"
+                      className="text-sm text-accent hover:text-accent-hover"
                     >
                       Mark all as read
                     </button>
@@ -763,7 +749,7 @@ const Profile: React.FC = () => {
                       type="text"
                       value={verificationForm.aadhaarNumber}
                       onChange={handleAadhaarChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all ${
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-all ${
                         verificationForm.aadhaarNumber ? (
                           aadhaarValidation.isValid ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'
                         ) : 'border-gray-300'
@@ -785,7 +771,7 @@ const Profile: React.FC = () => {
                     <select
                       value={verificationForm.documentType}
                       onChange={(e) => setVerificationForm(prev => ({ ...prev, documentType: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     >
                       <option value="aadhaar">Aadhaar Card</option>
                       <option value="pan">PAN Card</option>
@@ -803,7 +789,7 @@ const Profile: React.FC = () => {
                       type="text"
                       value={verificationForm.documentNumber}
                       onChange={(e) => setVerificationForm(prev => ({ ...prev, documentNumber: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       placeholder="Enter document number"
                       required
                     />
@@ -813,7 +799,7 @@ const Profile: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Document Upload *
                     </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-amber-400 transition-colors">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-accent transition-colors">
                       <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                       <p className="text-sm text-gray-600 mb-2">Upload clear photo of your document</p>
                       <input 
@@ -826,7 +812,7 @@ const Profile: React.FC = () => {
                       />
                       <label
                         htmlFor="document-upload"
-                        className="inline-flex items-center px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors cursor-pointer"
+                        className="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors cursor-pointer"
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Choose File
@@ -850,7 +836,7 @@ const Profile: React.FC = () => {
                     <button
                       type="submit"
                       disabled={verificationLoading || !aadhaarValidation.isValid}
-                      className="flex-1 px-6 py-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {verificationLoading ? 'Submitting...' : 'Submit Verification'}
                     </button>
@@ -904,7 +890,7 @@ const Profile: React.FC = () => {
                       type="text"
                       value={soldForm.invoiceNumber}
                       onChange={(e) => setSoldForm(prev => ({ ...prev, invoiceNumber: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       placeholder="Enter invoice number"
                       required
                     />
@@ -918,7 +904,7 @@ const Profile: React.FC = () => {
                       type="number"
                       value={soldForm.paymentAmount}
                       onChange={(e) => setSoldForm(prev => ({ ...prev, paymentAmount: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       placeholder="Actual payment received"
                       min="1"
                       required
@@ -933,7 +919,7 @@ const Profile: React.FC = () => {
                       type="file"
                       accept="image/*,.pdf"
                       onChange={(e) => setSoldForm(prev => ({ ...prev, invoice: e.target.files?.[0] || null }))} 
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       required
                     />
                   </div>
@@ -946,7 +932,7 @@ const Profile: React.FC = () => {
                       type="file"
                       accept="image/*,.pdf" 
                       onChange={(e) => setSoldForm(prev => ({ ...prev, paymentProof: e.target.files?.[0] || null }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       required
                     />
                   </div>

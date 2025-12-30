@@ -195,14 +195,14 @@ const Sell: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-secondary flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-          <Diamond className="w-16 h-16 text-amber-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Login Required</h2>
-          <p className="text-gray-600 mb-6">Please login to sell your diamonds</p>
+          <Diamond className="w-16 h-16 text-accent mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-text-main mb-4">Login Required</h2>
+          <p className="text-text-light mb-6">Please login to sell your diamonds</p>
           <button
             onClick={() => navigate('/login')}
-            className="w-full bg-amber-500 text-white py-2 px-4 rounded-lg hover:bg-amber-600 transition-colors"
+            className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-hover transition-colors"
           >
             Login Now
           </button>
@@ -212,15 +212,15 @@ const Sell: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-secondary py-12 pt-28">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-amber-500 to-yellow-500 px-8 py-6">
+          <div className="bg-accent px-8 py-6">
             <h1 className="text-3xl font-bold text-white flex items-center">
               <Diamond className="w-8 h-8 mr-3" />
               Sell Your Diamond
             </h1>
-            <p className="text-amber-100 mt-2">List your precious diamond on our premium marketplace</p>
+            <p className="text-gray-300 mt-2">List your precious diamond on our premium marketplace</p>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8">
@@ -239,13 +239,13 @@ const Sell: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Basic Information */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-                  <Info className="w-5 h-5 mr-2 text-amber-500" />
+                <h3 className="text-lg font-semibold text-text-main flex items-center">
+                  <Info className="w-5 h-5 mr-2 text-accent" />
                   Basic Information
                 </h3>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-text-main mb-2">
                     Diamond Name *
                   </label>
                   <input
@@ -254,14 +254,14 @@ const Sell: React.FC = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     placeholder="e.g., Brilliant Round Diamond"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Carat Weight *
                     </label>
                     <input
@@ -273,13 +273,13 @@ const Sell: React.FC = () => {
                       step="0.01"
                       min="0.01"
                       max="50"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       placeholder="1.25"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Price (USD) *
                     </label>
                     <div className="relative">
@@ -291,7 +291,7 @@ const Sell: React.FC = () => {
                         onChange={handleInputChange}
                         required
                         min="1"
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                         placeholder="5000"
                       />
                     </div>
@@ -300,7 +300,7 @@ const Sell: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Certificate Number
                     </label>
                     <input
@@ -308,13 +308,13 @@ const Sell: React.FC = () => {
                       name="certificateNumber"
                       value={formData.certificateNumber}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       placeholder="e.g., GIA-1234567890"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Certificate URL
                     </label>
                     <input
@@ -322,14 +322,14 @@ const Sell: React.FC = () => {
                       name="certificateUrl"
                       value={formData.certificateUrl}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       placeholder="https://..."
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-text-main mb-2">
                     Description *
                   </label>
                   <textarea
@@ -338,7 +338,7 @@ const Sell: React.FC = () => {
                     onChange={handleInputChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     placeholder="Describe your diamond's unique features, history, or special characteristics..."
                   />
                 </div>
@@ -346,13 +346,13 @@ const Sell: React.FC = () => {
 
               {/* Diamond Characteristics */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-                  <Diamond className="w-5 h-5 mr-2 text-amber-500" />
+                <h3 className="text-lg font-semibold text-text-main flex items-center">
+                  <Diamond className="w-5 h-5 mr-2 text-accent" />
                   Diamond Characteristics
                 </h3>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-text-main mb-2">
                     Cut *
                   </label>
                   <select
@@ -360,7 +360,7 @@ const Sell: React.FC = () => {
                     value={formData.cut}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                   >
                     <option value="">Select Cut</option>
                     {cuts.map(cut => (
@@ -371,7 +371,7 @@ const Sell: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Color *
                     </label>
                     <select
@@ -379,7 +379,7 @@ const Sell: React.FC = () => {
                       value={formData.color}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     >
                       <option value="">Select Color</option>
                       {colors.map(color => (
@@ -389,7 +389,7 @@ const Sell: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Clarity *
                     </label>
                     <select
@@ -397,7 +397,7 @@ const Sell: React.FC = () => {
                       value={formData.clarity}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     >
                       <option value="">Select Clarity</option>
                       {clarities.map(clarity => (
@@ -409,14 +409,14 @@ const Sell: React.FC = () => {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Fluorescence
                     </label>
                     <select
                       name="fluorescence"
                       value={formData.fluorescence}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     >
                       {fluorescenceOptions.map(option => (
                         <option key={option} value={option}>{option}</option>
@@ -425,14 +425,14 @@ const Sell: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Polish
                     </label>
                     <select
                       name="polish"
                       value={formData.polish}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     >
                       {polishOptions.map(option => (
                         <option key={option} value={option}>{option}</option>
@@ -441,14 +441,14 @@ const Sell: React.FC = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-text-main mb-2">
                       Symmetry
                     </label>
                     <select
                       name="symmetry"
                       value={formData.symmetry}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                     >
                       {symmetryOptions.map(option => (
                         <option key={option} value={option}>{option}</option>
@@ -461,20 +461,20 @@ const Sell: React.FC = () => {
 
             {/* Media Upload Section */}
             <div className="mt-8">
-              <h3 className="text-lg font-semibold text-gray-800 flex items-center mb-4">
-                <Video className="w-5 h-5 mr-2 text-amber-500" />
+              <h3 className="text-lg font-semibold text-text-main flex items-center mb-4">
+                <Video className="w-5 h-5 mr-2 text-accent" />
                 Diamond Media * (Images & Videos)
               </h3>
               
               <div className="space-y-4">
                 {/* Upload Area */}
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-amber-400 transition-colors">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-accent transition-colors">
                   <Upload className="w-8 h-8 text-gray-400 mx-auto mb-4" />
                   <div className="space-y-2">
-                    <p className="text-lg font-medium text-gray-700">Upload Diamond Media</p>
-                    <p className="text-sm text-gray-500">Images: PNG, JPG, JPEG, WebP (max 5MB each)</p>
-                    <p className="text-sm text-gray-500">Videos: MP4, MOV, AVI, MKV (max 50MB each)</p>
-                    <p className="text-sm text-gray-500">Maximum 10 files total</p>
+                    <p className="text-lg font-medium text-text-main">Upload Diamond Media</p>
+                    <p className="text-sm text-text-light">Images: PNG, JPG, JPEG, WebP (max 5MB each)</p>
+                    <p className="text-sm text-text-light">Videos: MP4, MOV, AVI, MKV (max 50MB each)</p>
+                    <p className="text-sm text-text-light">Maximum 10 files total</p>
                   </div>
                   <input
                     type="file"
@@ -486,7 +486,7 @@ const Sell: React.FC = () => {
                   />
                   <label
                     htmlFor="media"
-                    className="mt-4 inline-flex items-center px-6 py-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors cursor-pointer"
+                    className="mt-4 inline-flex items-center px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors cursor-pointer"
                   >
                     <Plus className="w-5 h-5 mr-2" />
                     Add Media Files
@@ -537,14 +537,14 @@ const Sell: React.FC = () => {
               <button
                 type="button"
                 onClick={() => navigate('/purchase')}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border border-gray-300 text-text-main rounded-lg hover:bg-secondary transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-8 py-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                className="px-8 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
               >
                 {loading ? (
                   <>

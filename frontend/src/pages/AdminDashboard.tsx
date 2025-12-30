@@ -367,7 +367,7 @@ const AdminDashboard: React.FC = () => {
 
   if (!admin) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-secondary flex items-center justify-center">
         <div className="text-center">
           <Shield className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Access Denied</h2>
@@ -379,9 +379,9 @@ const AdminDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-secondary flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-200 border-t-red-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-accent mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg">Loading admin dashboard...</p>
         </div>
       </div>
@@ -389,14 +389,14 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-secondary">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
                   <Shield className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -412,7 +412,7 @@ const AdminDashboard: React.FC = () => {
                   <p className="text-sm font-medium text-gray-900">{admin.name}</p>
                   <p className="text-xs text-gray-600">{admin.role}</p>
                 </div>
-                <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
               </div>
@@ -463,7 +463,7 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setActiveTab(id)}
                   className={`flex items-center space-x-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                     activeTab === id
-                      ? 'border-red-500 text-red-600'
+                      ? 'border-accent text-accent'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
@@ -577,7 +577,7 @@ const AdminDashboard: React.FC = () => {
                   <h2 className="text-2xl font-bold text-gray-900">Users Management</h2>
                   <button
                     onClick={fetchUsers}
-                    className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                     <span>Refresh</span>
@@ -636,7 +636,7 @@ const AdminDashboard: React.FC = () => {
                   <h2 className="text-2xl font-bold text-gray-900">Diamonds Management</h2>
                   <button
                     onClick={fetchDiamonds}
-                    className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                     <span>Refresh</span>
@@ -698,7 +698,7 @@ const AdminDashboard: React.FC = () => {
                   <h2 className="text-2xl font-bold text-gray-900">Contact Messages</h2>
                   <button
                     onClick={fetchContacts}
-                    className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                     <span>Refresh</span>
@@ -757,7 +757,7 @@ const AdminDashboard: React.FC = () => {
                   <h2 className="text-2xl font-bold text-gray-900">User Verifications</h2>
                   <button
                     onClick={fetchVerifications}
-                    className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                     <span>Refresh</span>
@@ -805,7 +805,7 @@ const AdminDashboard: React.FC = () => {
                             <td className="px-6 py-4 whitespace-nowrap">
                               <button
                                 onClick={() => setSelectedVerification(verification)}
-                                className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                                className="flex items-center space-x-1 px-3 py-1 bg-accent text-white text-sm rounded-lg hover:bg-accent-hover transition-colors"
                               >
                                 <Eye className="w-4 h-4" />
                                 <span>Review</span>
@@ -827,7 +827,7 @@ const AdminDashboard: React.FC = () => {
                   <h2 className="text-2xl font-bold text-gray-900">Diamond Sales</h2>
                   <button
                     onClick={fetchDiamondSales}
-                    className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                     <span>Refresh</span>
@@ -889,7 +889,7 @@ const AdminDashboard: React.FC = () => {
                             <td className="px-6 py-4 whitespace-nowrap">
                               <button
                                 onClick={() => setSelectedSale(sale)}
-                                className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                                className="flex items-center space-x-1 px-3 py-1 bg-accent text-white text-sm rounded-lg hover:bg-accent-hover transition-colors"
                               >
                                 <Eye className="w-4 h-4" />
                                 <span>Review</span>
@@ -989,7 +989,7 @@ const AdminDashboard: React.FC = () => {
                           value={rejectionReason}
                           onChange={(e) => setRejectionReason(e.target.value)}
                           rows={3}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                           placeholder="Enter reason for rejection..."
                         />
                       </div>
@@ -1140,7 +1140,7 @@ const AdminDashboard: React.FC = () => {
                           value={rejectionReason}
                           onChange={(e) => setRejectionReason(e.target.value)}
                           rows={3}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                           placeholder="Enter reason for rejection..."
                         />
                       </div>

@@ -261,7 +261,7 @@ const Purchase: React.FC = () => {
                       key={index}
                       onClick={() => setCurrentMediaIndex(index)}
                       className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${
-                        currentMediaIndex === index ? 'border-amber-500' : 'border-white'
+                        currentMediaIndex === index ? 'border-accent' : 'border-white'
                       }`}
                     >
                       {media.type === 'image' ? (
@@ -285,7 +285,7 @@ const Purchase: React.FC = () => {
             <div className="p-8">
               <div className="mb-6">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">{diamond.name}</h2>
-                <p className="text-4xl font-bold text-amber-600">{formatPrice(diamond.price)}</p>
+                <p className="text-4xl font-bold text-accent">{formatPrice(diamond.price)}</p>
                 <p className="text-gray-600">{formatPrice(Math.round(diamond.price / diamond.carat))} per carat</p>
               </div>
 
@@ -313,22 +313,22 @@ const Purchase: React.FC = () => {
                 <p className="text-gray-700 leading-relaxed">{diamond.description}</p>
               </div>
 
-              <div className="mb-6 p-4 bg-amber-50 rounded-lg">
+              <div className="mb-6 p-4 bg-secondary rounded-lg">
                 <div className="flex items-center mb-2">
-                  <User className="w-5 h-5 text-amber-600 mr-2" />
-                  <h3 className="text-lg font-semibold text-amber-800">Seller Information</h3>
+                  <User className="w-5 h-5 text-accent mr-2" />
+                  <h3 className="text-lg font-semibold text-gray-900">Seller Information</h3>
                 </div>
-                <p className="text-amber-700 font-medium">{diamond.sellerName}</p>
-                <p className="text-amber-600 text-sm">Listed on {formatDate(diamond.createdAt)}</p>
+                <p className="text-gray-800 font-medium">{diamond.sellerName}</p>
+                <p className="text-gray-600 text-sm">Listed on {formatDate(diamond.createdAt)}</p>
                 {diamond.certification?.certificateNumber && (
                   <div className="mt-2">
-                    <p className="text-amber-700 text-sm">Certificate: {diamond.certification.certificateNumber}</p>
+                    <p className="text-gray-800 text-sm">Certificate: {diamond.certification.certificateNumber}</p>
                     {diamond.certification.certificateUrl && (
                       <a 
                         href={diamond.certification.certificateUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-amber-600 text-sm hover:underline"
+                        className="text-accent text-sm hover:underline"
                       >
                         View Certificate →
                       </a>
@@ -340,7 +340,7 @@ const Purchase: React.FC = () => {
               <div className="flex space-x-4">
                 <button
                   onClick={() => handleInquire(diamond)}
-                  className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center transform hover:scale-105"
+                  className="flex-1 bg-accent text-white py-3 px-6 rounded-lg hover:bg-accent-hover transition-all duration-300 flex items-center justify-center transform hover:scale-105"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Send Inquiry
@@ -359,11 +359,11 @@ const Purchase: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-secondary flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-amber-200 border-t-amber-500 mx-auto mb-4"></div>
-            <Diamond className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-amber-500 animate-pulse" />
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-accent mx-auto mb-4"></div>
+            <Diamond className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-accent animate-pulse" />
           </div>
           <p className="text-gray-600 text-lg">Discovering premium diamonds...</p>
         </div>
@@ -372,14 +372,14 @@ const Purchase: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-amber-50">
+    <div className="min-h-screen bg-secondary pt-28">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-4xl font-bold text-gray-900 flex items-center mb-2">
-                <Diamond className="w-10 h-10 mr-4 text-amber-500 animate-pulse" />
+                <Diamond className="w-10 h-10 mr-4 text-accent animate-pulse" />
                 Premium Diamond Collection
               </h1>
               <p className="text-xl text-gray-600">Discover exceptional diamonds from verified sellers worldwide</p>
@@ -393,7 +393,7 @@ const Purchase: React.FC = () => {
                   setSortBy(sort);
                   setSortOrder(order);
                 }}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 hover:shadow-md"
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
               >
                 <option value="createdAt-desc">Newest First</option>
                 <option value="createdAt-asc">Oldest First</option>
@@ -419,13 +419,13 @@ const Purchase: React.FC = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 hover:shadow-md"
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 hover:shadow-md"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={handleSearch}
-                className="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                className="px-8 py-3 bg-accent text-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
               >
                 Search
               </button>
@@ -448,7 +448,7 @@ const Purchase: React.FC = () => {
                   <select
                     value={filters.cut}
                     onChange={(e) => handleFilterChange('cut', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300"
                   >
                     <option value="">All Cuts</option>
                     {cuts.map(cut => (
@@ -462,7 +462,7 @@ const Purchase: React.FC = () => {
                   <select
                     value={filters.color}
                     onChange={(e) => handleFilterChange('color', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300"
                   >
                     <option value="">All Colors</option>
                     {colors.map(color => (
@@ -476,7 +476,7 @@ const Purchase: React.FC = () => {
                   <select
                     value={filters.clarity}
                     onChange={(e) => handleFilterChange('clarity', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300"
                   >
                     <option value="">All Clarities</option>
                     {clarities.map(clarity => (
@@ -493,14 +493,14 @@ const Purchase: React.FC = () => {
                       placeholder="Min"
                       value={filters.minPrice}
                       onChange={(e) => handleFilterChange('minPrice', e.target.value)}
-                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300"
                     />
                     <input
                       type="number"
                       placeholder="Max"
                       value={filters.maxPrice}
                       onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -514,7 +514,7 @@ const Purchase: React.FC = () => {
                       step="0.01"
                       value={filters.minCarat}
                       onChange={(e) => handleFilterChange('minCarat', e.target.value)}
-                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300"
                     />
                     <input
                       type="number"
@@ -522,7 +522,7 @@ const Purchase: React.FC = () => {
                       step="0.01"
                       value={filters.maxCarat}
                       onChange={(e) => handleFilterChange('maxCarat', e.target.value)}
-                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
+                      className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -537,7 +537,7 @@ const Purchase: React.FC = () => {
                 </button>
                 <button
                   onClick={applyFilters}
-                  className="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                  className="px-8 py-3 bg-accent text-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                 >
                   Apply Filters
                 </button>
@@ -587,7 +587,7 @@ const Purchase: React.FC = () => {
                     {diamond.views}
                   </div>
                   <div className="absolute top-3 left-3">
-                    <span className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                    <span className="bg-accent text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                       {diamond.status.toUpperCase()}
                     </span>
                   </div>
@@ -595,13 +595,13 @@ const Purchase: React.FC = () => {
                 
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-gray-800 group-hover:text-amber-600 transition-colors duration-300">{diamond.name}</h3>
+                    <h3 className="text-xl font-bold text-gray-800 group-hover:text-accent transition-colors duration-300">{diamond.name}</h3>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 mb-4">
                     <div className="flex items-center bg-gray-50 p-2 rounded-lg">
                       <span className="font-semibold text-gray-800">Carat:</span>
-                      <span className="ml-2 text-amber-600 font-bold">{diamond.carat}</span>
+                      <span className="ml-2 text-accent font-bold">{diamond.carat}</span>
                     </div>
                     <div className="flex items-center bg-gray-50 p-2 rounded-lg">
                       <span className="font-semibold text-gray-800">Cut:</span>
@@ -621,17 +621,17 @@ const Purchase: React.FC = () => {
                     {diamond.description}
                   </p>
                   
-                  <div className="flex items-center text-sm text-gray-500 mb-6 bg-amber-50 p-3 rounded-lg">
-                    <User className="w-4 h-4 mr-2 text-amber-600" />
+                  <div className="flex items-center text-sm text-gray-500 mb-6 bg-secondary p-3 rounded-lg">
+                    <User className="w-4 h-4 mr-2 text-accent" />
                     <span className="mr-4 font-medium">{diamond.sellerName}</span>
-                    <Calendar className="w-4 h-4 mr-1 text-amber-600" />
+                    <Calendar className="w-4 h-4 mr-1 text-accent" />
                     <span>{formatDate(diamond.createdAt)}</span>
                   </div>
                   
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <p className="text-3xl font-bold text-gray-900">{formatPrice(diamond.price)}</p>
-                      <p className="text-sm text-amber-600 font-semibold">
+                      <p className="text-sm text-accent font-semibold">
                         {formatPrice(Math.round(diamond.price / diamond.carat))}/carat
                       </p>
                     </div>
@@ -645,14 +645,14 @@ const Purchase: React.FC = () => {
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setSelectedDiamond(diamond)}
-                      className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
+                      className="flex-1 px-4 py-3 bg-accent text-white rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Details
                     </button>
                     <button
                       onClick={() => handleInquire(diamond)}
-                      className="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
+                      className="flex-1 px-4 py-3 bg-green-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold transform hover:scale-105 flex items-center justify-center"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Inquire
@@ -701,7 +701,7 @@ const Purchase: React.FC = () => {
                     />
                     <div>
                       <h3 className="font-semibold text-gray-900">{inquiryDiamond.name}</h3>
-                      <p className="text-blue-600 font-bold">{formatPrice(inquiryDiamond.price)}</p>
+                      <p className="text-accent font-bold">{formatPrice(inquiryDiamond.price)}</p>
                       <p className="text-sm text-gray-600">Seller: {inquiryDiamond.sellerName}</p>
                     </div>
                   </div>
@@ -722,7 +722,7 @@ const Purchase: React.FC = () => {
                       type="text"
                       value={inquiryForm.subject}
                       onChange={(e) => setInquiryForm(prev => ({ ...prev, subject: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                       required
                     />
                   </div>
@@ -735,7 +735,7 @@ const Purchase: React.FC = () => {
                       value={inquiryForm.message}
                       onChange={(e) => setInquiryForm(prev => ({ ...prev, message: e.target.value }))}
                       rows={6}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent resize-vertical"
                       required
                     />
                   </div>
@@ -751,7 +751,7 @@ const Purchase: React.FC = () => {
                     <button
                       type="submit"
                       disabled={inquiryLoading}
-                      className="flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                      className="flex-1 px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     >
                       {inquiryLoading ? (
                         <>
